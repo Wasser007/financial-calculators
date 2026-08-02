@@ -15,6 +15,7 @@ import {
   type Drafts,
 } from "../lib/presentation/form-model";
 import { formatCurrencyDisplay } from "../lib/presentation/currency";
+import { AnnualTable } from "./annual-table";
 
 const metrics: readonly [string, keyof CalculatorSummary][] = [
   ["Final balance", "finalBalance"],
@@ -290,8 +291,10 @@ export function CalculatorWorkspace() {
           {textInput("inflationRate", "Annual inflation rate", "Enter the assumed annual inflation percentage.")}
         </details>
 
-        <button type="submit">Recalculate</button>
-        <button type="button" onClick={reset}>Reset</button>
+        <div className="flex flex-wrap gap-2">
+          <button type="submit">Recalculate</button>
+          <button type="button" onClick={reset}>Reset</button>
+        </div>
       </form>
 
       {stale && <p role="status">Results reflect the last valid calculation.</p>}
@@ -304,6 +307,7 @@ export function CalculatorWorkspace() {
           </div>
         ))}
       </dl>
+      <AnnualTable rows={last.result.annualSchedule} currency={last.inputs.currency} stale={stale} />
     </section>
   );
 }

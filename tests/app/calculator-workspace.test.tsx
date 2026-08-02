@@ -87,7 +87,12 @@ describe("CalculatorWorkspace behavior", () => {
   it("keeps old results stale for invalid edits, reveals one error on blur, and never evaluates", async () => {
     vi.useFakeTimers();
     setup(true);
-    const oldBalance = screen.getByText("Final balance").nextElementSibling?.textContent;
+    const summaryLabels = ["Final balance", "Total contributions", "Gross growth", "Total fees", "Nominal investment gain", "Inflation-adjusted ending balance"];
+    const summary = document.querySelector('dl[aria-label="Calculation results"]');
+    if (!summary) throw new Error("Calculation results summary was not rendered");
+    const summaryValue = (label: string) => within(summary).getByText(label).nextElementSibling?.textContent;
+    const oldSummary = summaryLabels.map(summaryValue);
+    const oldTable = screen.getByRole("table").textContent;
     evaluateCalls.splice(0);
     const principal = replace(/Starting balance/i, "bad");
     expect(screen.getByRole("status").textContent).toMatch(/last valid calculation/i);
@@ -95,7 +100,11 @@ describe("CalculatorWorkspace behavior", () => {
     fireEvent.blur(principal);
     expect(principal.getAttribute("aria-invalid")).toBe("true");
     expect(screen.getByText(/Enter a finite amount\/percentage/i)).not.toBeNull();
-    expect(screen.getByText("Final balance").nextElementSibling?.textContent).toBe(oldBalance);
+    expect(summaryLabels.map(summaryValue)).toEqual(oldSummary);
+    expect(screen.getByRole("table").textContent).toBe(oldTable);
+    expect(screen.getByText("Amounts shown in USD.")).toBeTruthy();
+    expect(screen.getByRole("region", { name: /Annual calculation detail/i }).getAttribute("data-stale")).toBe("true");
+    expect(screen.getAllByRole("status")).toHaveLength(1);
     act(() => vi.advanceTimersByTime(500));
     expect(evaluateCalls).toHaveLength(0);
   });
@@ -121,13 +130,19 @@ describe("CalculatorWorkspace behavior", () => {
     vi.useFakeTimers();
     setup(true);
     expect(screen.getByText("Final balance").nextElementSibling?.textContent).toContain("$");
+    expect(screen.getByRole("table").getAttribute("aria-describedby")).toBe("annual-table-currency");
     fireEvent.change(screen.getByLabelText(/Currency/i), { target: { value: "EUR" } });
     replace(/Starting balance/i, "bad");
     expect(screen.getByText("Final balance").nextElementSibling?.textContent).toContain("$");
+    expect(screen.getByText("Amounts shown in USD.")).toBeTruthy();
+    expect(screen.getByRole("region", { name: /Annual calculation detail/i }).getAttribute("data-stale")).toBe("true");
+    expect(screen.getAllByRole("status")).toHaveLength(1);
     replace(/Starting balance/i, "12000");
     act(() => vi.advanceTimersByTime(300));
     expect(screen.queryByRole("status")).toBeNull();
     expect(screen.getByText("Final balance").nextElementSibling?.textContent).toContain("€");
+    expect(screen.getByText("Amounts shown in EUR.")).toBeTruthy();
+    expect(screen.getByRole("region", { name: /Annual calculation detail/i }).getAttribute("data-stale")).toBeNull();
   });
 
   it("resets all ten defaults and calculates exactly once", async () => {
@@ -148,6 +163,56 @@ describe("CalculatorWorkspace behavior", () => {
     expect((screen.getByLabelText(/Compounding frequency/i) as HTMLSelectElement).value).toBe("monthly");
     expect((screen.getByLabelText(/Annual fee/i) as HTMLInputElement).value).toBe("0.00");
     expect((screen.getByLabelText(/Annual inflation rate/i) as HTMLInputElement).value).toBe("3.00");
+    expect(screen.getAllByRole("row")).toHaveLength(11);
+  });
+
+  it("groups Recalculate and Reset in a wrapping, spaced control row", () => {
+    setup();
+    const recalculate = screen.getByRole("button", { name: "Recalculate" });
+    const reset = screen.getByRole("button", { name: "Reset" });
+    expect(recalculate.parentElement).toBe(reset.parentElement);
+    const controls = recalculate.parentElement;
+    if (!controls) throw new Error("Calculator action controls were not rendered");
+    for (const token of ["flex", "flex-wrap", "gap-2"]) {
+      expect(controls.classList.contains(token)).toBe(true);
+    }
+    expect(recalculate.getAttribute("type")).toBe("submit");
+    expect(reset.getAttribute("type")).toBe("button");
+  });
+
+  it("keeps the annual table on the same last-valid result as the final balance", () => {
+    setup();
+    const finalBalance = screen.getByText("Final balance").nextElementSibling?.textContent;
+    const tableRows = within(screen.getByRole("table")).getAllByRole("row");
+    const finalAnnualEndingBalance = tableRows.at(-1)?.querySelectorAll("td")[5]?.textContent;
+    expect(finalAnnualEndingBalance).toBe(finalBalance);
+  });
+
+  it("preserves expanded annual pagination for stale drafts and resets it for a new valid result", () => {
+    vi.useFakeTimers();
+    setup(true);
+    replace(/Investment length/i, "132");
+    act(() => vi.advanceTimersByTime(300));
+    fireEvent.click(screen.getByRole("button", { name: "Show 10 more" }));
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(12);
+    replace(/Starting balance/i, "bad");
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(12);
+    replace(/Starting balance/i, "12000");
+    act(() => vi.advanceTimersByTime(300));
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(11);
+  });
+
+  it("resets an expanded annual table to the default USD result", () => {
+    vi.useFakeTimers();
+    setup(true);
+    replace(/Investment length/i, "132");
+    act(() => vi.advanceTimersByTime(300));
+    fireEvent.click(screen.getByRole("button", { name: "Show 10 more" }));
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(12);
+    fireEvent.click(screen.getByRole("button", { name: /Reset/i }));
+    expect((screen.getByLabelText(/Currency/i) as HTMLSelectElement).value).toBe("USD");
+    expect(screen.queryByRole("status")).toBeNull();
+    expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(11);
   });
 
   it("exposes all simple and advanced controls without calculating on details toggle", async () => {

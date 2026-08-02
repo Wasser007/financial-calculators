@@ -174,4 +174,44 @@ describe('S01 stress vector', () => {
     expect(result.annualSchedule).toHaveLength(100);
     expect(allNumbersFinite(result)).toBe(true);
   });
+
+  it('retains readable large annual schedule values through the final year', () => {
+    const result = calculate({
+      currency: 'USD',
+      initialPrincipal: 1_000_000_000,
+      contributionAmount: 100_000_000,
+      contributionFrequency: 'monthly',
+      contributionTiming: 'end',
+      durationMonths: 1200,
+      nominalAnnualRate: 0,
+      compoundingFrequency: 'monthly',
+      nominalAnnualFeeRate: 0,
+      inflationRate: 0,
+    });
+
+    expect(result.annualSchedule).toHaveLength(100);
+    expect(result.annualSchedule[0]).toMatchObject({
+      year: 1,
+      openingBalance: 1_000_000_000,
+      contributions: 1_200_000_000,
+      closingBalance: 2_200_000_000,
+    });
+    expect(result.annualSchedule.at(-1)).toMatchObject({
+      year: 100,
+      cumulativeContributions: 120_000_000_000,
+      closingBalance: 121_000_000_000,
+    });
+  });
+});
+
+describe('annual schedule presentation boundary', () => {
+  it('does not apply inflation adjustment to annual ledger output', () => {
+    const nominal = calculate({ ...validVectors[0]!.inputs, inflationRate: 0 });
+    const inflationAdjusted = calculate(validVectors[0]!.inputs);
+
+    expect(inflationAdjusted.annualSchedule).toEqual(nominal.annualSchedule);
+    expect(inflationAdjusted.inflationAdjustedFinalBalance).not.toBe(
+      nominal.inflationAdjustedFinalBalance,
+    );
+  });
 });

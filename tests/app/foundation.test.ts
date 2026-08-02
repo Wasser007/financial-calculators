@@ -36,4 +36,8 @@ describe("App Router foundation contract", () => {
     expect(workspaceSource).toContain('id="calculator-workspace"');
     expect(workspaceSource).toContain("bg-white p-6");
   });
+
+  it("does not impose a 320px minimum width on the page", () => {
+    expect(globalStyles).not.toMatch(/min-width\s*:\s*320px\s*;?/i);
+  });
 });
