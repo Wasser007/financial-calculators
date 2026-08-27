@@ -1,34 +1,61 @@
-import { CalculatorWorkspace } from "./calculator-workspace";
+import Link from "next/link";
+import { calculatorHref, getFeaturedCalculator } from "../lib/calculators/catalog";
+import { createPageMetadata } from "../lib/seo/publication";
+
+export const metadata = createPageMetadata("/");
+
+const principles = [
+  ["Explainable by design", "Inputs, assumptions, modeled results, and limitations stay visible so you can understand what changed."],
+  ["Private by default", "No registration is required. Calculator inputs are processed in your browser and are not saved by this site."],
+  ["Built for comparison", "Use the tools to explore scenarios—not as a prediction, recommendation, or promise of returns."],
+] as const;
+
 export default function HomePage() {
+  const featured = getFeaturedCalculator();
+  const featuredHref = calculatorHref(featured);
+  if (!featuredHref) throw new Error("The featured calculator must be live.");
   return (
-    <div className="min-h-screen bg-[#F7F8FA] text-[#132033]">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <a className="font-semibold" href="#calculator-workspace">Compound Interest Calculator</a>
-          <nav aria-label="Page sections" className="text-sm">
-            <a className="text-[#526174] underline-offset-4 hover:underline" href="#methodology">Methodology</a>
-          </nav>
+    <main id="main-content" className="page-container home-page">
+      <section aria-labelledby="home-title" className="home-hero">
+        <div>
+          <p className="eyebrow">Financial tools, clearly explained</p>
+          <h1 id="home-title">Plan with numbers you can understand.</h1>
+          <p className="home-hero__lede">ClearMoney Tools provides focused calculators for exploring financial scenarios, with transparent assumptions and plain-language limitations.</p>
+          <div className="hero-actions">
+            <Link className="button button--primary" href={featuredHref} prefetch={false}>Use the {featured.name.toLowerCase()}</Link>
+            <Link className="button button--secondary" href="/calculators" prefetch={false}>Browse calculators</Link>
+          </div>
+          <ul className="trust-list" aria-label="Site trust information"><li>No sign-up</li><li>Inputs stay in your browser</li><li>Transparent methodology</li></ul>
         </div>
-      </header>
-      <main id="main-content" className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-16">
-        <section aria-labelledby="page-title" className="max-w-3xl">
-          <p className="mb-3 text-sm font-medium text-[#526174]">English (United States)</p>
-          <h1 id="page-title" className="text-4xl font-semibold tracking-tight sm:text-5xl">Compound Interest Calculator</h1>
-          <p className="mt-5 text-lg leading-8 text-[#526174]">Understand how starting capital, recurring contributions, investment returns, fees, and inflation can affect long-term growth.</p>
-          <p className="mt-4 text-sm leading-6 text-[#526174]">For education only. This calculator will not provide investment advice or guarantee returns.</p>
-        </section>
-        <CalculatorWorkspace />
-        <section id="methodology" aria-labelledby="methodology-heading" className="mt-12 max-w-3xl">
-          <h2 id="methodology-heading" className="text-2xl font-semibold">How the calculator works</h2>
-          <p className="mt-3 leading-7 text-[#526174]">The completed tool will explain its assumptions, formulas, data presentation, and limitations alongside every calculation.</p>
-        </section>
-      </main>
-      <footer className="border-t border-slate-200 bg-white">
-        <section aria-labelledby="disclaimer-heading" className="mx-auto max-w-6xl px-4 py-8 text-sm text-[#526174] sm:px-6">
-          <h2 id="disclaimer-heading" className="font-semibold text-[#132033]">Important disclaimer</h2>
-          <p className="mt-2">Educational information only; not financial, tax, or investment advice.</p>
-        </section>
-      </footer>
-    </div>
+        <aside className="home-hero__note" aria-labelledby="illustration-boundary">
+          <p className="eyebrow">A useful boundary</p>
+          <h2 id="illustration-boundary">Explore a scenario—not a forecast.</h2>
+          <p>Results depend entirely on your inputs and the model’s assumptions. Actual returns, costs, taxes, inflation, and personal circumstances can differ.</p>
+          <Link href="/disclaimer" prefetch={false}>Read the full disclaimer</Link>
+        </aside>
+      </section>
+
+      <section aria-labelledby="available-tool" className="home-section flagship-section">
+        <div className="section-heading"><p className="eyebrow">Available now</p><h2 id="available-tool">{featured.name}</h2><p>{featured.shortDescription}</p></div>
+        <div className="flagship-card">
+          <div><span className="availability-badge">Live tool</span><h3>See how contributions and assumptions shape a balance over time.</h3><p>Review a result summary, interactive charts, and a complete annual table. Change currency and number format independently without changing the calculation.</p></div>
+          <Link className="text-link text-link--prominent" href={featuredHref} prefetch={false}>Open the calculator <span aria-hidden="true">→</span></Link>
+        </div>
+      </section>
+
+      <section aria-labelledby="principles-heading" className="home-section">
+        <div className="section-heading"><p className="eyebrow">How we build</p><h2 id="principles-heading">Useful without pretending to know the future.</h2></div>
+        <div className="principle-grid">{principles.map(([title, copy]) => <article className="principle-card" key={title}><h3>{title}</h3><p>{copy}</p></article>)}</div>
+      </section>
+
+      <section aria-labelledby="trust-links-heading" className="home-section trust-paths">
+        <div><p className="eyebrow">Before you rely on a result</p><h2 id="trust-links-heading">Check the method and the boundaries.</h2></div>
+        <div className="trust-paths__links">
+          <Link href="/methodology" prefetch={false}><strong>Methodology</strong><span>Calculation order, fees, inflation, rounding, and limitations.</span></Link>
+          <Link href="/privacy" prefetch={false}><strong>Privacy</strong><span>What the current site does—and does not—collect or retain.</span></Link>
+          <Link href="/about" prefetch={false}><strong>About</strong><span>Who these tools are for and the standards guiding them.</span></Link>
+        </div>
+      </section>
+    </main>
   );
 }

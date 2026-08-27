@@ -1,0 +1,16 @@
+.git
+.github
+.next
+node_modules
+coverage
+phase3a-screenshots
+scripts
+tests
+*.md
+*.log
+*.zip
+*.jsonl
+.env
+.env.*
+Dockerfile*
+docker-compose*.yml

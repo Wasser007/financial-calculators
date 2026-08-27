@@ -34,6 +34,37 @@ function displayedRowCount() {
 describe("AnnualTable", () => {
   afterEach(cleanup);
 
+  it("uses the supplied presentation locale for authoritative and mobile table amounts", () => {
+    const data = rows(1);
+    data[0] = { ...data[0], openingBalance: 1234.5, closingBalance: 1234.5 };
+    render(<AnnualTable rows={data} currency="USD" stale={false} presentationLocale="de-DE" />);
+    expect(screen.getAllByText((_, element) => element?.textContent === "1.234,50 $").length).toBeGreaterThan(0);
+  });
+
+  it("formats the authoritative annual table cells with the supplied locale", () => {
+    const data = rows(1);
+    data[0] = { ...data[0], openingBalance: 1234.5 };
+    render(<AnnualTable rows={data} currency="USD" stale={false} presentationLocale="de-DE" />);
+    const authoritativeRow = within(screen.getByRole("table")).getAllByRole("row")[1];
+    if (!authoritativeRow) throw new Error("expected one authoritative data row");
+    const openingBalanceCell = within(authoritativeRow).getAllByRole("cell")[1];
+    if (!openingBalanceCell) throw new Error("expected the opening-balance cell");
+    const expected = new Intl.NumberFormat("de-DE", { style: "currency", currency: "USD" }).format(1234.5);
+    expect(openingBalanceCell.textContent).toBe(expected);
+    expect(Array.from(openingBalanceCell.textContent ?? "", (character) => character.codePointAt(0))).toEqual(
+      Array.from(expected, (character) => character.codePointAt(0)),
+    );
+  });
+
+  it("formats the distinct compact mobile annual summary with the supplied locale", () => {
+    const data = rows(1);
+    data[0] = { ...data[0], closingBalance: 1234.5 };
+    const { container } = render(<AnnualTable rows={data} currency="USD" stale={false} presentationLocale="de-DE" />);
+    const compact = container.querySelector("div.md\\:hidden");
+    expect(compact?.getAttribute("aria-hidden")).toBe("true");
+    expect(compact?.textContent).toContain("Year 1: 1.234,50 $");
+  });
+
   it("renders the exact authoritative columns, caption, currency association, and no source-month fields", () => {
     render(<AnnualTable rows={rows(1)} currency="USD" stale={false} />);
     expect(screen.getAllByRole("columnheader").map((header) => header.textContent)).toEqual(headings);
@@ -57,6 +88,10 @@ describe("AnnualTable", () => {
 
   it("keeps the semantic table authoritative and exposes only an aria-hidden mobile summary", () => {
     render(<AnnualTable rows={rows(1)} currency="USD" stale={false} />);
+    const scrollHint = screen.getByText("Scroll the table horizontally to see every column.");
+    expect(scrollHint.hasAttribute("hidden")).toBe(false);
+    expect(scrollHint.getAttribute("aria-hidden")).toBeNull();
+    expect(scrollHint.querySelector("[aria-hidden=\"true\"]")?.textContent).toBe("↔");
     expect(screen.getByTestId("annual-table-scroll").className).toContain("overflow-x-auto");
     const summary = screen.getByText(/Year 1:/).parentElement;
     expect(summary?.getAttribute("aria-hidden")).toBe("true");
