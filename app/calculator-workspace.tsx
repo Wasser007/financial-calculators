@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import dynamic from "next/dynamic";
 import type {
   CalculatorInputs,
@@ -180,9 +180,8 @@ export function CalculatorWorkspace() {
   const isErrorVisible = (field: keyof Drafts) =>
     issueFor(errors, field) !== undefined && (submitted || blurred.has(field));
 
-  const handleFormChange = (event: FormEvent<HTMLFormElement>) => {
-    const target = event.target;
-    if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return;
+  const handleControlChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const target = event.currentTarget;
     if (target.name === "presentation-locale") {
       changePresentationLocale(target.value);
       return;
@@ -253,6 +252,7 @@ export function CalculatorWorkspace() {
             inputMode="decimal"
             autoComplete="off"
             value={drafts[field]}
+            onChange={handleControlChange}
             aria-invalid={visibleError || undefined}
             aria-describedby={describedBy(field, visibleError)}
           />
@@ -285,7 +285,7 @@ export function CalculatorWorkspace() {
 
       <div className="calculator-layout">
         <div className="input-card">
-          <form onBlur={handleFormBlur} onChange={handleFormChange} onSubmit={submit} noValidate>
+          <form onBlur={handleFormBlur} onSubmit={submit} noValidate>
             {submitted && errors.length > 0 && (
               <div className="error-summary" ref={errorSummary} tabIndex={-1} role="alert" id="error-summary">
                 <h3>Check your inputs</h3>
@@ -308,6 +308,7 @@ export function CalculatorWorkspace() {
                     id="currency"
                     name="currency"
                     value={drafts.currency}
+                    onChange={handleControlChange}
                     aria-invalid={isErrorVisible("currency") || undefined}
                     aria-describedby={describedBy("currency", isErrorVisible("currency"))}
                   >
@@ -318,7 +319,7 @@ export function CalculatorWorkspace() {
                 </div>
                 <div className="field">
                   <label htmlFor="presentation-locale">Number format</label>
-                  <select aria-describedby="presentation-locale-help" id="presentation-locale" name="presentation-locale" value={presentationLocale}>
+                  <select aria-describedby="presentation-locale-help" id="presentation-locale" name="presentation-locale" value={presentationLocale} onChange={handleControlChange}>
                     {PRESENTATION_LOCALE_OPTIONS.map(([locale, label]) => <option key={locale} value={locale}>{label}</option>)}
                   </select>
                   <p className="field__help" id="presentation-locale-help">Changes number formatting only. It does not change the currency, content language, or calculation.</p>
@@ -337,6 +338,7 @@ export function CalculatorWorkspace() {
                     id="contributionFrequency"
                     name="contributionFrequency"
                     value={drafts.contributionFrequency}
+                    onChange={handleControlChange}
                     aria-invalid={isErrorVisible("contributionFrequency") || undefined}
                     aria-describedby={describedBy("contributionFrequency", isErrorVisible("contributionFrequency"))}
                   >
@@ -364,7 +366,7 @@ export function CalculatorWorkspace() {
                   <div className="segmented-control">
                     {["beginning", "end"].map((timing) => (
                       <label key={timing}>
-                        <input type="radio" name="contributionTiming" value={timing} checked={drafts.contributionTiming === timing} />
+                        <input type="radio" name="contributionTiming" value={timing} checked={drafts.contributionTiming === timing} onChange={handleControlChange} />
                         <span>{timing}</span>
                       </label>
                     ))}
@@ -374,7 +376,7 @@ export function CalculatorWorkspace() {
                 </fieldset>
                 <div className="field">
                   <label htmlFor="compoundingFrequency">Compounding frequency</label>
-                  <select id="compoundingFrequency" name="compoundingFrequency" value={drafts.compoundingFrequency} aria-invalid={isErrorVisible("compoundingFrequency") || undefined} aria-describedby={describedBy("compoundingFrequency", isErrorVisible("compoundingFrequency"))}>
+                  <select id="compoundingFrequency" name="compoundingFrequency" value={drafts.compoundingFrequency} onChange={handleControlChange} aria-invalid={isErrorVisible("compoundingFrequency") || undefined} aria-describedby={describedBy("compoundingFrequency", isErrorVisible("compoundingFrequency"))}>
                     {["daily", "monthly", "quarterly", "semi-annually", "annually"].map((frequency) => <option key={frequency} value={frequency}>{frequency}</option>)}
                   </select>
                   <p className="field__help" id="compoundingFrequency-help">How often the nominal annual return compounds.</p>

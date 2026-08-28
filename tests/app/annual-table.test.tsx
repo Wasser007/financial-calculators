@@ -106,20 +106,26 @@ describe("AnnualTable", () => {
     expect(table.classList.contains("w-max")).toBe(true);
 
     for (const header of screen.getAllByRole("columnheader")) {
-      for (const token of ["px-3", "py-2", "whitespace-nowrap"]) {
+      for (const token of ["annual-table-heading-cell", "px-3", "py-2"]) {
         expect(header.classList.contains(token)).toBe(true);
       }
     }
+
+    expect(screen.getByRole("columnheader", { name: "Opening balance" }).querySelectorAll(".annual-table-header-label--multiline")).toHaveLength(0);
+    expect(screen.getByRole("columnheader", { name: "Cumulative contributions" }).querySelectorAll(".annual-table-header-label--multiline")).toHaveLength(1);
+    expect(screen.getByRole("columnheader", { name: "Cumulative gross growth" }).querySelectorAll(".annual-table-header-label--multiline")).toHaveLength(1);
+    expect(screen.getByRole("columnheader", { name: "Cumulative fees" }).querySelectorAll(".annual-table-header-label--multiline")).toHaveLength(1);
+    expect(screen.getByRole("columnheader", { name: "Cumulative gross growth" }).querySelectorAll(".annual-table-header-label > span")).toHaveLength(2);
 
     const cells = within(table).getAllByRole("cell");
     for (const token of ["px-3", "py-2", "whitespace-nowrap"]) {
       expect(cells[0]?.classList.contains(token)).toBe(true);
     }
-    expect(cells[0]?.classList.contains("text-right")).toBe(false);
-    expect(cells[0]?.classList.contains("tabular-nums")).toBe(false);
+    expect(cells[0]?.classList.contains("text-center")).toBe(true);
+    expect(cells[0]?.classList.contains("tabular-nums")).toBe(true);
 
     for (const cell of cells.slice(1)) {
-      for (const token of ["px-3", "py-2", "whitespace-nowrap", "text-right", "tabular-nums"]) {
+      for (const token of ["px-3", "py-2", "whitespace-nowrap", "text-center", "tabular-nums"]) {
         expect(cell.classList.contains(token)).toBe(true);
       }
     }

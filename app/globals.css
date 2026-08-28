@@ -149,7 +149,7 @@ input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity:
 .charts-section, .annual-card { padding: clamp(1.25rem, 3vw, 2rem); }
 .chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .chart-card { min-width: 0; margin: 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem; background: var(--surface-soft); }
-.chart-card figcaption h3 { margin: 0; font-size: 1.05rem; }
+.chart-card figcaption h3 { margin: 0; color: var(--brand); font-size: 1.05rem; font-weight: 800; }
 .chart-kicker { margin: 0 0 .25rem; color: var(--muted); font-size: .875rem; font-weight: 700; }
 .chart-instruction { margin: .55rem 0; color: var(--muted); font-size: .875rem; }
 .chart-figure > [role="group"] { border-radius: var(--radius-sm); }
@@ -178,13 +178,16 @@ input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity:
 .annual-table-scroll:focus-visible { outline-offset: 2px; }
 .annual-table-scroll table { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0; font-size: .875rem; }
 .annual-table-scroll caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-.annual-table-scroll th, .annual-table-scroll td { min-width: 130px; border-bottom: 1px solid var(--line); padding: .8rem .75rem; white-space: nowrap; }
-.annual-table-scroll th { background: #eef3f6; color: var(--ink-soft); font-size: .875rem; font-weight: 800; letter-spacing: .02em; text-align: right; }
-.annual-table-scroll th:first-child, .annual-table-scroll td:first-child { min-width: 72px; text-align: left; }
+.annual-table-scroll th, .annual-table-scroll td { min-width: 116px; border-bottom: 1px solid var(--line); padding: .75rem .6rem; text-align: center; vertical-align: middle; }
+.annual-table-scroll th { white-space: normal; background: #eef3f6; color: var(--ink-soft); font-size: .875rem; font-weight: 800; letter-spacing: .02em; line-height: 1.2; }
+.annual-table-scroll td { white-space: nowrap; }
+.annual-table-scroll th:first-child, .annual-table-scroll td:first-child { min-width: 64px; text-align: center; }
+.annual-table-header-label { display: inline-flex; align-items: center; justify-content: center; }
+.annual-table-header-label--multiline { flex-direction: column; }
 .annual-table-scroll tbody tr:nth-child(even) { background: var(--surface-soft); }
 .annual-table-scroll tbody tr:hover { background: var(--brand-soft); }
 .annual-table-scroll tbody tr:last-child td { border-bottom: 0; }
-.numeric-cell { text-align: right; font-variant-numeric: tabular-nums; }
+.numeric-cell { text-align: center; font-variant-numeric: tabular-nums; }
 .year-cell { color: var(--ink); font-weight: 800; }
 .annual-mobile-summary { display: none; }
 .table-more { margin-top: 1rem; }
