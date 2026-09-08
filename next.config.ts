@@ -2,7 +2,7 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: "export",
   outputFileTracingRoot: path.resolve(process.cwd()),
   poweredByHeader: false,
   typescript: {
