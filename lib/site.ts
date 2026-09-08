@@ -13,9 +13,9 @@ export const SITE = {
   publicationStatus: "prelaunch" as PublicationStatus,
   defaultContentLanguage: DEFAULT_PUBLISHED_CONTENT_LANGUAGE.tag,
   policyApprovals: {
-    privacy: false,
-    terms: false,
-    disclaimer: false,
+    privacy: true,
+    terms: true,
+    disclaimer: true,
   },
 } as const;
 
