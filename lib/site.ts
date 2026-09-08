@@ -3,13 +3,13 @@ import { DEFAULT_PUBLISHED_CONTENT_LANGUAGE } from "./internationalization/model
 export type PublicationStatus = "prelaunch" | "ready-for-publication";
 
 export const SITE = {
-  name: "ClearMoney Tools",
-  approvedPublicName: null as string | null,
-  legalOperator: null as string | null,
+  name: "ClearCash Calc",
+  approvedPublicName: "ClearCash Calc",
+  legalOperator: "Independent Developer", 
   lastUpdated: "August 25, 2026",
-  canonicalOrigin: null as string | null,
-  feedbackAddress: null as string | null,
-  feedbackAddressVerified: false,
+  canonicalOrigin: "https://clearcashcalc.com",
+  feedbackAddress: "contact@clearcashcalc.com",
+  feedbackAddressVerified: true,
   publicationStatus: "prelaunch" as PublicationStatus,
   defaultContentLanguage: DEFAULT_PUBLISHED_CONTENT_LANGUAGE.tag,
   policyApprovals: {

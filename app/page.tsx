@@ -20,7 +20,7 @@ export default function HomePage() {
         <div>
           <p className="eyebrow">Financial tools, clearly explained</p>
           <h1 id="home-title">Plan with numbers you can understand.</h1>
-          <p className="home-hero__lede">ClearMoney Tools provides focused calculators for exploring financial scenarios, with transparent assumptions and plain-language limitations.</p>
+          <p className="home-hero__lede">ClearCash Calc provides focused calculators for exploring financial scenarios, with transparent assumptions and plain-language limitations.</p>
           <div className="hero-actions">
             <Link className="button button--primary" href={featuredHref} prefetch={false}>Use the {featured.name.toLowerCase()}</Link>
             <Link className="button button--secondary" href="/calculators" prefetch={false}>Browse calculators</Link>
