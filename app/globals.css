@@ -917,3 +917,51 @@ button.button--ghost:active {
     0 1px 2px rgba(15, 23, 42, 0.06),
     inset 0 2px 3px rgba(0, 0, 0, 0.06);
 }
+
+/* ==========================================================================
+   Worked Example Card 3D & Surface Normalization
+   ========================================================================== */
+
+.worked-example {
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.85) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 16px -4px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+.worked-example:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(15, 118, 110, 0.35) !important;
+  box-shadow:
+    0 12px 28px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08) !important;
+}
+
+/* ==========================================================================
+   Site Footer Layout Optimization
+   ========================================================================== */
+
+.site-footer__inner {
+  display: grid !important;
+  grid-template-columns: minmax(280px, 420px) auto !important;
+  justify-content: start !important;
+  gap: 2rem 5rem !important;
+}
+
+.site-footer p {
+  max-width: 380px !important;
+  line-height: 1.6 !important;
+}
+
+.site-footer .footer-nav,
+.site-footer nav,
+.site-footer__links {
+  display: flex !important;
+  gap: 3.5rem !important;
+}
