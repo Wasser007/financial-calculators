@@ -8,17 +8,19 @@ import {
 } from "../lib/calculators/savings-goal/schema.js";
 import { buildSavingsGoalPresentation } from "../lib/calculators/savings-goal/presentation.js";
 
-function formatMoney(val: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(val);
-}
+const CURRENCY_OPTIONS = ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"];
+const LOCALE_OPTIONS = [
+  { value: "en-US", label: "United States (en-US)" },
+  { value: "en-GB", label: "United Kingdom (en-GB)" },
+  { value: "de-DE", label: "Germany (de-DE)" },
+  { value: "fr-FR", label: "France (fr-FR)" },
+];
 
 export function SavingsGoalWorkspace() {
   const [form, setForm] = useState<SavingsGoalFormValues>(SAVINGS_GOAL_DEFAULTS);
+  const [currency, setCurrency] = useState("USD");
+  const [locale, setLocale] = useState("en-US");
+
   const validation = useMemo(() => validateSavingsGoalForm(form), [form]);
   const presentation = useMemo(() => {
     if (!validation.isValid || !validation.sanitized) return null;
@@ -29,13 +31,28 @@ export function SavingsGoalWorkspace() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleReset = () => {
+    setForm(SAVINGS_GOAL_DEFAULTS);
+  };
+
+  const formatMoney = (val: number): string => {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(val);
+  };
+
   return (
-    <div className="calculator-workspace">
-      {/* 顶部标题栏，保证两边卡片顶部基准线平齐 */}
+    <section className="calculator-workspace" aria-labelledby="calculator-heading">
+      {/* 顶部标题区 */}
       <div className="calculator-heading">
-        <span className="eyebrow">YOUR CALCULATION</span>
-        <h2>Savings Goal Parameters</h2>
-        <p>Set your savings target, initial deposit, and timeline to calculate the required monthly savings.</p>
+        <div>
+          <p className="eyebrow">Your calculation</p>
+          <h2 id="calculator-heading">Savings Goal Parameters</h2>
+        </div>
+        <p>Complete the inputs below to calculate your required savings schedule. Results update automatically.</p>
       </div>
 
       <div className="calculator-layout">
@@ -45,11 +62,42 @@ export function SavingsGoalWorkspace() {
             <fieldset className="form-step">
               <legend><span>1</span> Starting amount</legend>
 
+              {/* 第一步：币种与数字格式 */}
+              <div className="field-grid field-grid--two">
+                <div className="field">
+                  <label htmlFor="currency">Currency</label>
+                  <select
+                    id="currency"
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                  >
+                    {CURRENCY_OPTIONS.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                  <p className="field__help">Changes currency symbols only.</p>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="locale">Number format</label>
+                  <select
+                    id="locale"
+                    value={locale}
+                    onChange={(e) => setLocale(e.target.value)}
+                  >
+                    {LOCALE_OPTIONS.map((loc) => (
+                      <option key={loc.value} value={loc.value}>{loc.label}</option>
+                    ))}
+                  </select>
+                  <p className="field__help">Changes number formatting only.</p>
+                </div>
+              </div>
+
               {/* 目标金额 */}
               <div className="field">
                 <label htmlFor="targetAmount">Savings Target ($)</label>
                 <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">USD</span>
+                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
                   <input
                     id="targetAmount"
                     name="targetAmount"
@@ -59,9 +107,10 @@ export function SavingsGoalWorkspace() {
                     className="has-prefix"
                     value={form.targetAmount}
                     onChange={(e) => handleChange("targetAmount", e.target.value)}
-                    aria-describedby={validation.errors.targetAmount ? "targetAmount-error" : undefined}
+                    aria-describedby={validation.errors.targetAmount ? "targetAmount-error" : "targetAmount-help"}
                   />
                 </div>
+                <p className="field__help" id="targetAmount-help">The final accumulated amount you are targeting.</p>
                 {validation.errors.targetAmount && (
                   <p id="targetAmount-error" className="field__error">
                     {validation.errors.targetAmount}
@@ -73,7 +122,7 @@ export function SavingsGoalWorkspace() {
               <div className="field">
                 <label htmlFor="initialBalance">Initial Starting Balance ($)</label>
                 <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">USD</span>
+                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
                   <input
                     id="initialBalance"
                     name="initialBalance"
@@ -83,9 +132,10 @@ export function SavingsGoalWorkspace() {
                     className="has-prefix"
                     value={form.initialBalance}
                     onChange={(e) => handleChange("initialBalance", e.target.value)}
-                    aria-describedby={validation.errors.initialBalance ? "initialBalance-error" : undefined}
+                    aria-describedby={validation.errors.initialBalance ? "initialBalance-error" : "initialBalance-help"}
                   />
                 </div>
+                <p className="field__help" id="initialBalance-help">Amount already saved before recurring deposits.</p>
                 {validation.errors.initialBalance && (
                   <p id="initialBalance-error" className="field__error">
                     {validation.errors.initialBalance}
@@ -97,7 +147,7 @@ export function SavingsGoalWorkspace() {
             <fieldset className="form-step">
               <legend><span>2</span> Timeline & returns</legend>
 
-              {/* 期限：年与月 */}
+              {/* 期限：年数与月数 */}
               <div className="field-grid field-grid--two">
                 <div className="field">
                   <label htmlFor="years">Years</label>
@@ -129,13 +179,14 @@ export function SavingsGoalWorkspace() {
                   </div>
                 </div>
               </div>
+              <p className="field__help">Time horizon to reach your target savings goal.</p>
               {validation.errors.duration && (
                 <p className="field__error" role="alert">
                   {validation.errors.duration}
                 </p>
               )}
 
-              {/* 预期年化收益率 */}
+              {/* 预估年化收益率 */}
               <div className="field">
                 <label htmlFor="annualReturnRate">Estimated Annual Return (%)</label>
                 <div className="control-wrap">
@@ -148,10 +199,11 @@ export function SavingsGoalWorkspace() {
                     className="has-suffix"
                     value={form.annualReturnRatePct}
                     onChange={(e) => handleChange("annualReturnRatePct", e.target.value)}
-                    aria-describedby={validation.errors.annualReturnRatePct ? "annualReturnRate-error" : undefined}
+                    aria-describedby={validation.errors.annualReturnRatePct ? "annualReturnRate-error" : "annualReturnRate-help"}
                   />
                   <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
                 </div>
+                <p className="field__help" id="annualReturnRate-help">Expected annual rate of return or yield.</p>
                 {validation.errors.annualReturnRatePct && (
                   <p id="annualReturnRate-error" className="field__error">
                     {validation.errors.annualReturnRatePct}
@@ -160,10 +212,8 @@ export function SavingsGoalWorkspace() {
               </div>
 
               {/* 存款时点 */}
-              <fieldset className="timing-fieldset" style={{ marginTop: "1rem" }}>
-                <legend style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--ink-soft)", marginBottom: "0.5rem" }}>
-                  Deposit Timing
-                </legend>
+              <fieldset className="timing-fieldset">
+                <legend>Deposit Timing</legend>
                 <div className="segmented-control" role="radiogroup">
                   <label>
                     <input
@@ -188,48 +238,63 @@ export function SavingsGoalWorkspace() {
                 </div>
               </fieldset>
             </fieldset>
+
+            {/* 操作栏 */}
+            <div className="form-actions">
+              <button type="submit" className="button button--primary">
+                Recalculate
+              </button>
+              <button type="button" className="button button--ghost" onClick={handleReset}>
+                Reset
+              </button>
+            </div>
           </form>
         </div>
 
-        {/* 右栏：结果展示卡片 */}
+        {/* 右栏：结果卡片 */}
         <div className="results-card" aria-live="polite">
           <div className="results-card__header">
             <div>
-              <span className="eyebrow">YOUR ILLUSTRATION</span>
+              <p className="eyebrow">YOUR ILLUSTRATION</p>
               <h2>Required Contribution Plan</h2>
             </div>
-            <span className="currency-badge">USD · en-US</span>
+            <span className="currency-badge">{currency} · {locale}</span>
           </div>
 
           {presentation ? (
-            <div className="results-grid">
+            <div>
+              {/* 主指标 */}
               <dl className="result-metric result-metric--primary">
                 <dt>Required Monthly Deposit</dt>
                 <dd>{formatMoney(presentation.requiredDeposit)}</dd>
-                <p className="illustration-note">per month to reach goal</p>
               </dl>
 
-              <dl className="result-metric">
-                <dt>Total Contributions</dt>
-                <dd>{formatMoney(presentation.totalContributions)}</dd>
-              </dl>
+              {/* 次级指标横向对齐双列 */}
+              <div className="results-grid" style={{ marginTop: "1.25rem", borderTop: "1px solid #f1f5f9", paddingTop: "1.25rem" }}>
+                <dl className="result-metric">
+                  <dt>Total Contributions</dt>
+                  <dd>{formatMoney(presentation.totalContributions)}</dd>
+                </dl>
 
-              <dl className="result-metric">
-                <dt>Total Interest Earned</dt>
-                <dd style={{ color: "#16a34a" }}>+{formatMoney(presentation.totalInterestEarned)}</dd>
-              </dl>
+                <dl className="result-metric">
+                  <dt>Total Interest Earned</dt>
+                  <dd style={{ color: "#16a34a" }}>+{formatMoney(presentation.totalInterestEarned)}</dd>
+                </dl>
 
-              <dl className="result-metric">
-                <dt>Target Achieved</dt>
-                <dd>{formatMoney(presentation.finalBalance)}</dd>
-              </dl>
+                <dl className="result-metric">
+                  <dt>Target Achieved</dt>
+                  <dd>{formatMoney(presentation.finalBalance)}</dd>
+                </dl>
 
-              <dl className="result-metric">
-                <dt>Portfolio Breakdown</dt>
-                <dd style={{ fontSize: "0.95rem", fontWeight: 500 }}>
-                  {presentation.breakdown.startingBalancePct.toFixed(1)}% initial · {presentation.breakdown.depositsPct.toFixed(1)}% deposits · {presentation.breakdown.interestPct.toFixed(1)}% interest
-                </dd>
-              </dl>
+                <dl className="result-metric">
+                  <dt>Portfolio Breakdown</dt>
+                  <dd style={{ fontSize: "0.85rem", fontWeight: 500, lineHeight: 1.4 }}>
+                    {presentation.breakdown.startingBalancePct.toFixed(1)}% initial<br />
+                    {presentation.breakdown.depositsPct.toFixed(1)}% deposits<br />
+                    {presentation.breakdown.interestPct.toFixed(1)}% interest
+                  </dd>
+                </dl>
+              </div>
             </div>
           ) : (
             <div style={{ padding: "1.5rem 0" }}>
@@ -239,47 +304,54 @@ export function SavingsGoalWorkspace() {
             </div>
           )}
 
-          <div className="illustration-note" style={{ marginTop: "1.5rem", padding: "0.85rem", background: "#f8fafc", borderRadius: "8px" }}>
-            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--ink-soft)" }}>
-              Calculation assumes constant monthly contributions and fixed compound growth. Actual yields and market returns may fluctuate.
+          {/* 免责提示 */}
+          <aside className="illustration-note" aria-label="Illustration disclaimer">
+            <p>
+              <strong>Illustration only.</strong> Not investment, tax, or financial advice. Returns, fees, inflation, and outcomes can differ.
             </p>
-          </div>
+          </aside>
         </div>
       </div>
 
-      {/* 底部明细表格卡片 */}
+      {/* 底部年度进度明细表 */}
       {presentation && presentation.annualRows.length > 0 && (
-        <div className="annual-card" style={{ marginTop: "2rem" }}>
-          <div className="card-heading" style={{ marginBottom: "1rem" }}>
-            <span className="eyebrow">SCHEDULE</span>
-            <h2>Annual Savings Progression</h2>
+        <section className="annual-card" style={{ marginTop: "2rem" }}>
+          <div className="card-heading">
+            <div>
+              <p className="eyebrow">SCHEDULE</p>
+              <h2>Annual Savings Progression</h2>
+            </div>
+            <p style={{ textAlign: "right", margin: 0 }}>Amounts shown in {currency}.</p>
           </div>
+          <p style={{ fontSize: "0.85rem", color: "var(--ink-soft)", margin: "0.5rem 0 1rem" }}>
+            ← Scroll the table horizontally to see every column.
+          </p>
           <div className="annual-table-scroll" style={{ overflowX: "auto" }}>
-            <table className="annual-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+            <table className="annual-table">
               <thead>
                 <tr>
-                  <th scope="col" style={{ textAlign: "left", padding: "0.75rem 1rem" }}>Year</th>
-                  <th scope="col" style={{ textAlign: "right", padding: "0.75rem 1rem" }}>Starting balance</th>
-                  <th scope="col" style={{ textAlign: "right", padding: "0.75rem 1rem" }}>Annual deposits</th>
-                  <th scope="col" style={{ textAlign: "right", padding: "0.75rem 1rem" }}>Interest earned</th>
-                  <th scope="col" style={{ textAlign: "right", padding: "0.75rem 1rem" }}>Ending balance</th>
+                  <th scope="col" style={{ textAlign: "left" }}>Year</th>
+                  <th scope="col" style={{ textAlign: "right" }}>Starting balance</th>
+                  <th scope="col" style={{ textAlign: "right" }}>Annual deposits</th>
+                  <th scope="col" style={{ textAlign: "right" }}>Interest earned</th>
+                  <th scope="col" style={{ textAlign: "right" }}>Ending balance</th>
                 </tr>
               </thead>
               <tbody>
                 {presentation.annualRows.map((row) => (
                   <tr key={row.year}>
-                    <td style={{ textAlign: "left", padding: "0.75rem 1rem", borderTop: "1px solid #e2e8f0" }}>Year {row.year}</td>
-                    <td style={{ textAlign: "right", padding: "0.75rem 1rem", borderTop: "1px solid #e2e8f0" }}>{formatMoney(row.startingBalance)}</td>
-                    <td style={{ textAlign: "right", padding: "0.75rem 1rem", borderTop: "1px solid #e2e8f0" }}>{formatMoney(row.annualDeposits)}</td>
-                    <td style={{ textAlign: "right", padding: "0.75rem 1rem", borderTop: "1px solid #e2e8f0", color: "#16a34a" }}>+{formatMoney(row.annualInterest)}</td>
-                    <td style={{ textAlign: "right", padding: "0.75rem 1rem", borderTop: "1px solid #e2e8f0", fontWeight: 600 }}>{formatMoney(row.endingBalance)}</td>
+                    <td style={{ textAlign: "left" }}>Year {row.year}</td>
+                    <td style={{ textAlign: "right" }}>{formatMoney(row.startingBalance)}</td>
+                    <td style={{ textAlign: "right" }}>{formatMoney(row.annualDeposits)}</td>
+                    <td style={{ textAlign: "right", color: "#16a34a" }}>+{formatMoney(row.annualInterest)}</td>
+                    <td style={{ textAlign: "right", fontWeight: 600 }}>{formatMoney(row.endingBalance)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </section>
   );
 }

@@ -738,3 +738,82 @@ input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity:
   font-family: inherit;
   letter-spacing: -0.01em;
 }
+/* ==========================================================================
+   Tool Cards & 3D Interactive Controls Alignment
+   ========================================================================== */
+
+.tool-card {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: clamp(1.25rem, 2.5vw, 1.85rem);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 16px -4px rgba(15, 23, 42, 0.06);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(15, 118, 110, 0.35);
+  box-shadow:
+    0 12px 28px -6px rgba(15, 23, 42, 0.1),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08);
+}
+
+.tool-card h3 {
+  margin: 0.35rem 0 0.25rem;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.tool-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* 按钮高科技 3D 立体质感与防变色修复 */
+.button--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%) !important;
+  border: 1px solid rgba(13, 148, 136, 0.9);
+  border-radius: 9999px;
+  box-shadow:
+    0 2px 4px rgba(15, 118, 110, 0.2),
+    0 4px 12px rgba(15, 118, 110, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.button--primary:hover,
+.button--primary:focus-visible {
+  color: #ffffff !important;
+  background: linear-gradient(180deg, #14b8a6 0%, #0d9488 100%) !important;
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 8px rgba(15, 118, 110, 0.25),
+    0 8px 20px rgba(15, 118, 110, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.button--primary:active {
+  transform: translateY(0);
+  box-shadow:
+    0 1px 2px rgba(15, 118, 110, 0.2),
+    inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}

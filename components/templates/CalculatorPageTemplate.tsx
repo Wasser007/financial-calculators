@@ -78,7 +78,7 @@ export function CalculatorPageTemplate({
 
       {/* 5. 统一 FAQ 模块 */}
       {faqs && faqs.length > 0 && (
-        <section className="content-section content-section--narrow" aria-labelledby="faq-heading">
+        <section className="content-section" aria-labelledby="faq-heading">
           <div className="section-heading">
             <p className="eyebrow">Common questions</p>
             <h2 id="faq-heading">Frequently asked questions</h2>
