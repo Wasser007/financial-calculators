@@ -140,14 +140,52 @@ function AnnualFigure({ model, committed, visible, onSelect, onPreview, onPrevie
   return <figure aria-labelledby="annual-title" className="chart-figure chart-card">
     <figcaption><p className="chart-kicker">How it changes over time</p><h3 id="annual-title">{title}</h3></figcaption>
     <p className="chart-instruction" id="annual-instruction">{instruction}</p>
-    <div role="group" tabIndex={0} aria-labelledby="annual-title" aria-describedby="annual-instruction" onKeyDown={(event) => { const index = nextIndex(event, committedIndex, model.points.length); if (index !== undefined) onSelect(index); }}>
-      <svg viewBox={annualViewBox.value} role="img" aria-labelledby="annual-svg-title annual-svg-desc" className="chart-svg" onPointerMove={(event) => previewSpatialSelection(event, renderedXPositions, annualPlot, annualViewBox, onPreview, onPreviewClear)} onPointerLeave={onPreviewClear} onPointerUp={(event) => { if (event.pointerType === "touch") onPreviewClear(); commitSpatialSelection(event, renderedXPositions, annualPlot, annualViewBox, committedIndex, onSelect); }}>
-        <title id="annual-svg-title">Annual ending balance</title><desc id="annual-svg-desc">One marker for each supplied annual ending balance.</desc>
-        <polyline fill="none" className="chart-line" points={model.points.map((p, i) => `${annualX(i, model.points.length)},${140 - ((p.rawClosingBalance - model.domain.min) / Math.max(1, model.domain.max - model.domain.min)) * 100}`).join(" ")} />
-        {model.points.map((p, index) => <circle key={p.id} aria-hidden="true" className="chart-point" cx={annualX(index, model.points.length)} cy={140 - ((p.rawClosingBalance - model.domain.min) / Math.max(1, model.domain.max - model.domain.min)) * 100} r={index === visibleIndex ? 6 : 4} />)}
-        <rect data-chart-hit-region="annual" aria-hidden="true" focusable="false" fill="transparent" x={annualPlot.left} y={annualPlot.top} width={annualPlot.right - annualPlot.left} height={annualPlot.bottom - annualPlot.top} />
-      </svg>
-    </div>
+      <div role="group" tabIndex={0} aria-labelledby="annual-title" aria-describedby="annual-instruction" onKeyDown={(event) => { const index = nextIndex(event, committedIndex, model.points.length); if (index !== undefined) onSelect(index); }}>
+        <svg viewBox={annualViewBox.value} role="img" aria-labelledby="annual-svg-desc" className="chart-svg" onPointerMove={(event) => previewSpatialSelection(event, renderedXPositions, annualPlot, annualViewBox, onPreview, onPreviewClear)} onPointerLeave={onPreviewClear} onPointerUp={(event) => { if (event.pointerType === "touch") onPreviewClear(); commitSpatialSelection(event, renderedXPositions, annualPlot, annualViewBox, committedIndex, onSelect); }}>
+          <desc id="annual-svg-desc">One marker for each supplied annual ending balance.</desc>
+          <rect data-chart-hit-region="annual" aria-hidden="true" focusable="false" fill="transparent" x={annualPlot.left} y={annualPlot.top} width={annualPlot.right - annualPlot.left} height={annualPlot.bottom - annualPlot.top} />
+          <polyline fill="none" className="chart-line" points={model.points.map((p, i) => `${annualX(i, model.points.length)},${140 - ((p.rawClosingBalance - model.domain.min) / Math.max(1, model.domain.max - model.domain.min)) * 100}`).join(" ")} />
+          {model.points.map((p, index) => {
+            const cx = annualX(index, model.points.length);
+            const cy = 140 - ((p.rawClosingBalance - model.domain.min) / Math.max(1, model.domain.max - model.domain.min)) * 100;
+            const isSelected = index === visibleIndex;
+
+            return (
+              <g key={p.id} className="chart-point-group">
+                <circle
+                  className="chart-point cursor-pointer"
+                  cx={cx}
+                  cy={cy}
+                  r={isSelected ? 7 : 4.5}
+                  onPointerEnter={() => onPreview(index)}
+                  onClick={() => onSelect(index)}
+                />
+                {isSelected && (
+                  <g className="chart-tooltip-badge" pointerEvents="none">
+                    <rect
+                      x={Math.max(10, Math.min(cx - 65, (annualViewBox.width || 400) - 130))}
+                      y={Math.max(10, cy - 36)}
+                      width="130"
+                      height="28"
+                      rx="8"
+                      ry="8"
+                      className="chart-tooltip-bg"
+                    />
+                    <text
+                      x={Math.max(10, Math.min(cx - 65, (annualViewBox.width || 400) - 130)) + 65}
+                      y={Math.max(10, cy - 36) + 18}
+                      textAnchor="middle"
+                      className="chart-tooltip-text"
+                    >
+                      {p.accessibleLabel.replace(/\.$/, "")}
+                    </text>
+                  </g>
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
     <ol className="chart-values chart-values--annual" aria-label="Annual ending balance values">{model.points.map((item, index) => <li key={item.id}><button type="button" tabIndex={-1} onFocus={() => onSelect(index)} onClick={() => onSelect(index)} aria-current={index === committedIndex ? "true" : undefined}>{item.accessibleLabel}</button></li>)}</ol>
     <p className="chart-selected">{point.accessibleLabel}</p><p className="chart-summary">{model.classification.staticSummary.visibleText}</p><a className="text-link" href="#annual-table-heading">View annual calculation detail <span aria-hidden="true">↓</span></a>
   </figure>;
