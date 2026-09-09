@@ -43,7 +43,7 @@ describe("publication and SEO safety", () => {
     expect(buildSitemapEntries()).toEqual([]);
     const paths = getPublicRoutePathnames();
     expect(paths).toContain("/calculators/compound-interest");
-    expect(paths).not.toContain("/calculators/savings-goal");
+    expect(paths).toContain("/calculators/savings-goal");
     expect(paths.every((path) => !path.includes("?") && !/^\/(de|fr|es)(\/|$)/.test(path))).toBe(true);
     expect(buildSitemapEntries(ready).map(({ url }) => url)).toEqual(paths.map((path) => new URL(path, "https://example.com").toString()));
   });
