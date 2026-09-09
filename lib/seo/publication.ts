@@ -50,8 +50,17 @@ export function getPublicationReadiness(config: PublicationConfig = SITE) {
   return { ready: missing.length === 0, missing } as const;
 }
 
-export function getRobotsMetadata(config: PublicationConfig = SITE): Metadata["robots"] {
-  return getPublicationReadiness(config).ready ? { index: true, follow: true } : { index: false, follow: false };
+export function getRobotsMetadata(_config: PublicationConfig = SITE): Metadata["robots"] {
+  return {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  };
 }
 
 export function normalizePublicPathname(value: string): string | null {
