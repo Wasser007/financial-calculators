@@ -12,6 +12,7 @@ Updated: 2026-08-27
 | 3A-04 | SEO, schema, methodology/content depth, YMYL trust signals, authorship/review workflow, feedback, and structured educational data | Human Accepted and Closed |
 | 3A-05 | Production domain/deployment, performance, monitoring, security headers, analytics/consent, commercial foundations | Human Accepted and Closed |
 | 3A-06 | Real-device, browser, assistive-technology, print, performance, SEO, privacy, and evidence-debt release gate | Human Accepted and Closed |
+| Release Track 2-A | Phase 3A Git checkpoint (commit + annotated tag) | Complete — created 2026-08-27 |
 
 Phase 2C is complete at `Human CLOSED 122 / Implemented, evidence incomplete 0 / Not implemented 0 / Primary browser/manual pending 0 / Known product defects 0`.
 
@@ -19,7 +20,7 @@ Current governance state:
 
 - Phase 3A implementation and evidence are complete.
 - Phase 3A-01 through Phase 3A-06 are Human Accepted and Closed.
-- Release Track 2-A Phase 3A checkpoint preparation is in progress.
+- Phase 3A checkpoint is created: commit `257c87b` and annotated tag `phase-3a-compound-interest-pre-public-v1` (66 files; not pushed).
 - Production identity, legal-operator, public-domain, hosting and deployment decisions remain pending.
 - Public deployment is not authorized and public indexing remains disabled.
 - No second calculator or subsequent product phase has started.
@@ -35,7 +36,23 @@ Current governance state:
 
 ## Unique next task
 
-Prepare an exact, recoverable Phase 3A Git checkpoint scope. Audit and classify every tracked and untracked worktree item, identify generated evidence and sensitive artifacts, and stop before staging. One separate explicit Human authorization is required before any stage, commit, annotated tag or private remote push. Do not begin another calculator during checkpoint preparation.
+The Phase 3A checkpoint is complete (commit `257c87b`, annotated tag `phase-3a-compound-interest-pre-public-v1`). Two streams may proceed in parallel:
+
+1. Release Track 1 — production identity and legal decisions: final brand, legal operator and address, HTTPS production domain, hosting platform and region, public feedback address, author/reviewer identities, and legal review of Privacy/Terms/Disclaimer. These are Human decisions; wiring the real identity into site configuration and enabling canonical/sitemap/robots/schema publication follows only after approval.
+2. Wave 1 calculator expansion — Savings Goal Calculator specification first (research, calculation spec with counterexamples, reference implementation and frozen vectors), then How Long Will My Money Last?.
+
+No stage, commit, tag, push, deployment, or indexing change happens without separate explicit Human authorization.
+
+## Phase 3A checkpoint record (2026-08-27)
+
+Authorized by Human on 2026-08-27 and created on branch `master`:
+
+- Commit: `257c87b` — `release: checkpoint Phase 3A compound-interest calculator (Phase 2C 122/122, pre-public)`
+- Annotated tag: `phase-3a-compound-interest-pre-public-v1`
+- Scope: exactly 66 files (product source, tests, governance documents, deployment files).
+- Excluded: 39 pre-existing Phase 2C audit/history files, 21 generated PNG screenshots, and 5 personal photographs; all remain untracked (65 untracked files total).
+- Verification at creation: `git diff --check` PASS; ledger 122 rows / 122 Human CLOSED; P3A06R3 transitions 34 rows / 34 unique IDs; full tests 17 files / 420 PASS; typecheck and both builds PASS (previously accepted results reused, not rerun).
+- Push: not performed. `origin` is `https://github.com/Wasser007/financial-calculators.git`; `master` has no upstream configured. A separate explicit Human authorization is required before any push.
 
 ## Task-start Git preservation snapshot
 
