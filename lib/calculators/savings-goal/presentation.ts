@@ -2,7 +2,7 @@ import {
   calculateSavingsGoal,
   type SavingsGoalInput,
   type SavingsGoalResult,
-} from "./math";
+} from "./math.js";
 
 export interface AnnualScheduleRow {
   year: number;

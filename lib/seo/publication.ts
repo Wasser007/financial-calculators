@@ -31,6 +31,14 @@ export const COMPOUND_INTEREST_PAGE: PageDefinition = {
   h1: "Compound Interest Calculator",
 };
 
+export const SAVINGS_GOAL_PAGE: PageDefinition = {
+  pathname: "/calculators/savings-goal",
+  title: "Savings Goal Calculator - Plan Your Periodic Contributions",
+  description: "Calculate the exact monthly or periodic contribution needed to reach your savings goal based on timeline, return rate, and initial capital.",
+  h1: "Savings Goal Calculator",
+};
+
+
 function approvedHttpsOrigin(value: string | null): string | null {
   if (!value) return null;
   try {
@@ -70,6 +78,7 @@ export function buildCanonical(pathname: string, config: PublicationConfig = SIT
 
 export function getPageDefinition(pathname: string): PageDefinition {
   if (pathname === COMPOUND_INTEREST_PAGE.pathname) return COMPOUND_INTEREST_PAGE;
+  if (pathname === SAVINGS_GOAL_PAGE.pathname) return SAVINGS_GOAL_PAGE;
   const page = STATIC_PUBLIC_PAGES.find((entry) => entry.pathname === pathname);
   if (!page) throw new Error(`No public page definition for ${pathname}`);
   return page;

@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   SAVINGS_GOAL_DEFAULTS,
   validateSavingsGoalForm,
-} from "../../lib/calculators/savings-goal/schema";
-import { buildSavingsGoalPresentation } from "../../lib/calculators/savings-goal/presentation";
+} from "../../lib/calculators/savings-goal/schema.js";
+import { buildSavingsGoalPresentation } from "../../lib/calculators/savings-goal/presentation.js";
 
 describe("Savings Goal Presentation Contract", () => {
   it("validates valid baseline defaults", () => {
@@ -40,8 +40,8 @@ describe("Savings Goal Presentation Contract", () => {
 
     expect(presentation.requiredDeposit).toBeGreaterThan(0);
     expect(presentation.annualRows).toHaveLength(5);
-    expect(presentation.annualRows[0].year).toBe(1);
-    expect(presentation.annualRows[4].endingBalance).toBeGreaterThanOrEqual(49990);
+    expect(presentation.annualRows[0]!.year).toBe(1);
+    expect(presentation.annualRows[4]!.endingBalance).toBeGreaterThanOrEqual(49990);
 
     const { startingBalancePct, depositsPct, interestPct } = presentation.breakdown;
     expect(startingBalancePct + depositsPct + interestPct).toBeCloseTo(100, 1);

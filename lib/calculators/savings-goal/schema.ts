@@ -1,4 +1,4 @@
-import type { DepositTiming } from "./math";
+import type { DepositTiming } from "./math.js";
 
 export interface SavingsGoalFormValues {
   targetAmount: string;

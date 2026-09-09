@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateSavingsGoal } from "../../lib/calculators/savings-goal/math";
+import { calculateSavingsGoal } from "../../lib/calculators/savings-goal/math.js";
 
 describe("Savings Goal Calculator Math Oracle", () => {
   it("Vector 1: Standard Monthly Beginning of Period (5yr, $100k, $10k initial, 6% APY)", () => {
