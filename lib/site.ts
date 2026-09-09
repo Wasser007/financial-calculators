@@ -4,18 +4,18 @@ export type PublicationStatus = "prelaunch" | "ready-for-publication";
 
 export const SITE = {
   name: "ClearCash Calc",
-  approvedPublicName: "ClearCash Calc",
-  legalOperator: "Independent Developer", 
+  approvedPublicName: null,
+  legalOperator: null, 
   lastUpdated: "August 25, 2026",
-  canonicalOrigin: "https://clearcashcalc.com",
+  canonicalOrigin: null,
   feedbackAddress: "contact@clearcashcalc.com",
-  feedbackAddressVerified: true,
+  feedbackAddressVerified: false,
   publicationStatus: "prelaunch" as PublicationStatus,
   defaultContentLanguage: DEFAULT_PUBLISHED_CONTENT_LANGUAGE.tag,
   policyApprovals: {
-    privacy: true,
-    terms: true,
-    disclaimer: true,
+    privacy: false,
+    terms: false,
+    disclaimer: false,
   },
 } as const;
 

@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #0f172a;               /* 科技蓝黑 Slate-900，更高级深邃 */
-  --ink-soft: #334155;          /* 次级文本 Slate-700 */
-  --muted: #64748b;             /* 辅助文本 Slate-500，拉开层级 */
+  --ink: #000000;
+  --ink-soft: #000000;
+  --muted: #000000;
   --page: #f8fafc;              /* 极淡冷灰背景 Slate-50 */
   --surface: #ffffff;
   --surface-soft: #f1f5f9;

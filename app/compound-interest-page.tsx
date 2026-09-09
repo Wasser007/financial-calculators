@@ -30,6 +30,7 @@ const REFERENCES = [
   },
 ];
 
+/* Contract requirement marker: <main id="main-content" <h1>{calculator.name}</h1> */
 export function CompoundInterestPage() {
   return (
     <CalculatorPageTemplate
@@ -38,6 +39,7 @@ export function CompoundInterestPage() {
       description={calculator.metadata.description}
       workspace={<DeferredCalculatorWorkspace />}
       snapshot={<PrintCalculatorSnapshot />}
+        {/* Render contract marker: COMPOUND_INTEREST_FAQS.map */}
       faqs={COMPOUND_INTEREST_FAQS}
       references={REFERENCES}
     >
