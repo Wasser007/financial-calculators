@@ -31,6 +31,13 @@ export const COMPOUND_INTEREST_PAGE: PageDefinition = {
   h1: "Compound Interest Calculator",
 };
 
+export const LOAN_MORTGAGE_PAGE: PageDefinition = {
+  pathname: "/calculators/loan-mortgage-amortization",
+  title: "Loan & Mortgage Amortization Calculator — ClearCash Calc",
+  description: "Calculate monthly payments, total interest costs, and schedule payoffs for fixed payment and equal principal loans.",
+  h1: "Loan & Mortgage Amortization Calculator",
+};
+
 export const SAVINGS_GOAL_PAGE: PageDefinition = {
   pathname: "/calculators/savings-goal",
   title: "Savings Goal Calculator - Plan Your Periodic Contributions",
@@ -79,6 +86,7 @@ export function buildCanonical(pathname: string, config: PublicationConfig = SIT
 export function getPageDefinition(pathname: string): PageDefinition {
   if (pathname === COMPOUND_INTEREST_PAGE.pathname) return COMPOUND_INTEREST_PAGE;
   if (pathname === SAVINGS_GOAL_PAGE.pathname) return SAVINGS_GOAL_PAGE;
+  if (pathname === LOAN_MORTGAGE_PAGE.pathname) return LOAN_MORTGAGE_PAGE;
   const page = STATIC_PUBLIC_PAGES.find((entry) => entry.pathname === pathname);
   if (!page) throw new Error(`No public page definition for ${pathname}`);
   return page;
