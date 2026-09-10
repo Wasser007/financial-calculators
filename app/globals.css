@@ -989,3 +989,330 @@ a.button--secondary:active {
     0 1px 2px rgba(15, 23, 42, 0.06),
     inset 0 2px 3px rgba(0, 0, 0, 0.06) !important;
 }
+
+/* ==========================================================================
+   Segmented Control: 3D Raised vs Inset Pressed State Standard
+   ========================================================================== */
+
+/* 底座轨道槽：内凹轨道基准 */
+.segmented-control {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(203, 213, 225, 0.9) !important;
+  border-radius: var(--radius-md, 12px) !important;
+  padding: 4px !important;
+  gap: 6px !important;
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.08) !important;
+}
+
+.segmented-control label {
+  position: relative !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+}
+
+.segmented-control input {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 1. 未选中按钮：3D 凸起浮雕态（可点击感强） */
+.segmented-control span {
+  display: flex !important;
+  min-height: 42px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  color: #475569 !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 4px rgba(15, 23, 42, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.05) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  user-select: none !important;
+}
+
+/* 未选中悬停：轻微上浮 */
+.segmented-control label:hover input:not(:checked) + span {
+  color: #0f172a !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 4px 8px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* 2. 选中按钮：3D 物理按压凹陷态（明确被锁定的感觉） */
+.segmented-control input:checked + span {
+  transform: translateY(1px) !important;
+  background: linear-gradient(180deg, #e6f4f1 0%, #ccede7 100%) !important;
+  color: #0f766e !important;
+  border: 1px solid rgba(15, 118, 110, 0.35) !important;
+  /* 深度内凹阴影 + 底部高光反弹，模拟机械按键按下 */
+  box-shadow:
+    inset 0 3px 6px -1px rgba(15, 118, 110, 0.28),
+    inset 0 1px 2px 0 rgba(0, 0, 0, 0.12),
+    0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 键盘焦点 */
+.segmented-control input:focus-visible + span {
+  outline: 3px solid #0d9488 !important;
+  outline-offset: 2px !important;
+}
+
+/* ==========================================================================
+   Tool Cards (.tool-card) Canonical 3D Elevation & Micro-Interaction
+   ========================================================================== */
+
+/* 1. 列表卡片本体：双层微光背景 + 层次阴影 + 柔和边框 */
+.tool-card {
+  position: relative !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 18px -4px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+/* 2. 可用工具卡片（.tool-card--live）悬停动效：平滑上浮 + 品牌微绿微光光晕 */
+.tool-card--live:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(15, 118, 110, 0.38) !important;
+  box-shadow:
+    0 12px 30px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08) !important;
+}
+
+/* 3. 卡片内 LIVE TOOL 标签：立体药丸徽章 */
+.tool-card__tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%) !important;
+  color: #065f46 !important;
+  border: 1px solid rgba(167, 243, 208, 0.8) !important;
+  border-radius: 9999px !important;
+  padding: 0.2rem 0.65rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* ==========================================================================
+   Tool Directory Cards (.tool-card) Canonical 3D Styling & Interaction
+   ========================================================================== */
+.tool-card {
+  position: relative !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 16px -4px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+.tool-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(15, 118, 110, 0.45) !important;
+  box-shadow:
+    0 12px 28px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.1) !important;
+}
+
+/* ==========================================================================
+   Header Navigation: Left-Aligned with 3D Tactile Dropdowns
+   ========================================================================== */
+
+/* 1. 顶部栏布局：让导航靠左，紧跟 Logo 排布 */
+.site-header__inner {
+  justify-content: space-between !important;
+}
+
+.site-header__left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2.25rem !important;
+}
+
+.site-nav--desktop {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/* 2. 导航项胶囊微按钮风格 */
+.nav-dropdown-trigger,
+.nav-plain-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  padding: 0.45rem 0.95rem !important;
+  border-radius: 9999px !important;
+  color: #334155 !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.nav-dropdown-trigger:hover,
+.nav-plain-link:hover {
+  color: #0f766e !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%) !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.05),
+    0 2px 6px -1px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* 当前激活状态：凹陷锁定质感 */
+.nav-dropdown-trigger--active,
+.nav-plain-link[aria-current="page"] {
+  color: #0f766e !important;
+  background: linear-gradient(180deg, #e6f4f1 0%, #d4eee8 100%) !important;
+  border-color: rgba(15, 118, 110, 0.3) !important;
+  box-shadow:
+    inset 0 2px 4px rgba(15, 118, 110, 0.2),
+    0 1px 1px rgba(255, 255, 255, 0.8) !important;
+}
+
+.dropdown-arrow {
+  font-size: 0.75rem !important;
+  transition: transform 0.2s ease !important;
+  opacity: 0.7;
+}
+
+.nav-item-dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg) !important;
+  color: #0f766e !important;
+}
+
+/* 3. 3D 拟物下拉菜单面板 */
+.nav-item-dropdown {
+  position: relative !important;
+}
+
+.nav-dropdown-menu {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  width: max-content !important;
+  min-width: 320px !important;
+  max-width: 420px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.85) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  padding: 0.65rem !important;
+  box-shadow:
+    0 4px 6px -1px rgba(15, 23, 42, 0.06),
+    0 14px 34px -4px rgba(15, 23, 42, 0.14),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(8px) scale(0.98) !important;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.2s ease !important;
+  z-index: 50 !important;
+}
+
+/* 悬停与聚焦时平滑滑出 */
+.nav-item-dropdown:hover .nav-dropdown-menu,
+.nav-item-dropdown:focus-within .nav-dropdown-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+/* 菜单分组标题 */
+.nav-dropdown-menu__header {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: #0f766e !important;
+  padding: 0.4rem 0.65rem 0.25rem !important;
+}
+
+/* 4. 下拉项条目：与幽灵按钮/次级按钮质感一致 */
+.nav-dropdown-item {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  padding: 0.6rem 0.75rem !important;
+  border-radius: var(--radius-md, 10px) !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  transition: all 0.16s ease !important;
+}
+
+.nav-dropdown-item .item-title {
+  color: #0f172a !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+.nav-dropdown-item .item-desc {
+  color: #64748b !important;
+  font-size: 0.76rem !important;
+  line-height: 1.35 !important;
+}
+
+/* 下拉项悬停动效：微光浮雕与左侧高亮提示 */
+.nav-dropdown-item:hover {
+  background: linear-gradient(180deg, #f0fdfa 0%, #e6f7f4 100%) !important;
+  border-color: rgba(15, 118, 110, 0.25) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 4px rgba(15, 118, 110, 0.06) !important;
+  transform: translateX(2px) !important;
+}
+
+.nav-dropdown-item:hover .item-title {
+  color: #0f766e !important;
+}
+
+.nav-dropdown-item--active {
+  background: #f1f5f9 !important;
+}
+
+/* 5. 菜单底部“查看全部”快捷入口 */
+.nav-dropdown-menu__footer {
+  margin-top: 0.4rem !important;
+  padding-top: 0.45rem !important;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+.all-tools-link {
+  display: block !important;
+  text-align: center !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: #0f766e !important;
+  padding: 0.4rem 0 !important;
+  text-decoration: none !important;
+  border-radius: 8px !important;
+  transition: background 0.15s ease !important;
+}
+
+.all-tools-link:hover {
+  background: #ecfdf5 !important;
+}
