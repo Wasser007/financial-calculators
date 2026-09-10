@@ -68,7 +68,7 @@ describe("deployment readiness and production safety", () => {
     expect(source).not.toContain("Strict-Transport-Security");
     expect(source).not.toContain("Content-Security-Policy");
     expect(source).not.toContain("unsafe-eval");
-    expect(source).toContain('output: "standalone"');
+    expect(source).toContain('output: "export"');
     expect(source).toContain("poweredByHeader: false");
   });
 
