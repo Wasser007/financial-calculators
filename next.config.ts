@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  trailingSlash: true,
   outputFileTracingRoot: path.resolve(process.cwd()),
   poweredByHeader: false,
   typescript: {
