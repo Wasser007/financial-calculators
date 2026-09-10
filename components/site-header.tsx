@@ -41,7 +41,7 @@ export function SiteHeader() {
                 {liveCalculators.map((calc) => (
                   <Link
                     key={calc.slug}
-                    href={calc.route}
+                    href={calc.route ?? "/calculators"}
                     className={`nav-dropdown-item ${pathname === calc.route ? "nav-dropdown-item--active" : ""}`}
                     prefetch={false}
                   >
