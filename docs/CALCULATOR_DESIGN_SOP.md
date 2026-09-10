@@ -36,6 +36,12 @@
 * **主按钮规范**：`className="button button--primary"`，深青渐变高光，胶囊圆角（`border-radius: 9999px`），悬停纯白高亮上浮。
 * **次级按钮规范**：`className="button button--ghost"`，双层微光立体边框，悬停透出 `#0f766e` 品牌色。
 
+
+### 1.7 分段选择器 3D 拟物标准（Segmented Control）
+* **容器结构**：采用 `.segmented-control` 双项/多项网格。
+* **未选中状态**：自动呈现 3D 凸起浮雕态（悬浮渐变底 + 外阴影 `0 2px 4px`），悬停微升。
+* **选中状态**：自动呈现 3D 凹陷锁定态（`input:checked + span` 产生 `inset` 双重内阴影与浅青色内凹槽底色），形成明显的物理开关反馈。
+
 ## 2. 标准代码模板 (Copy-Paste Ready)
 
 ### 2.1 表单输入控件标准骨架

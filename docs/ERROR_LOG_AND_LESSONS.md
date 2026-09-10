@@ -47,3 +47,21 @@
 * **预防机制**：
   1. `.calculator-layout` 必须锁定 `align-items: start !important;`。
   2. 子级卡片必须显式重置 `margin-top: 0 !important;`，确保顶部边框位于同一绝对水平基准线。
+
+---
+
+## 案例 6：工具上线未同步提升测试集契约
+* **现象**：将新工具标记为 \`live\` 后，全量测试报错，提示 \`expected 2 tools but got 3\`。
+* **根因**：基础集成测试（\`calculator-catalog.test.ts\`、\`site-structure.test.tsx\`）写死了当前线上工具总数与硬编码枚举，工具上线时未能同步更新断言契约。
+* **预防机制**：
+  1. 工具从 \`planned\` 转为 \`live\` 时，集成测试必须同步纳入该工具的路由断言与按钮数量断言。
+  2. 严禁把断言报错当作阻碍，它是验证全站链路真实连通的最后一公里保证。
+
+---
+
+## 案例 7：负向测试（Negative Invariant Test）硬编码索引失效
+* **现象**：测试预期断言抛出 \`Planned calculator cannot have a route\`，但实际未抛出任何错误。
+* **根因**：测试用例直接使用数字索引 \`plannedRoute[2]\` 来模拟非法 planned 工具。当第 3 项从 planned 变为 live 时，该项本身就拥有合法的 route，导致非法注入测试变成合法配置。
+* **预防机制**：
+  1. 负向测试必须通过语义查找（如 \`catalog.find(c => c.availability === "planned")\`）获取目标，严禁硬编码数组索引。
+  2. 目录中 planned 工具总数变化时，Roadmap 中关于 Planned 徽章数量的硬编码断言必须随之调整。

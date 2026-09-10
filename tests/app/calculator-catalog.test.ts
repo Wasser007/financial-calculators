@@ -26,9 +26,9 @@ describe("calculator catalog", () => {
   });
 
   it("keeps compound interest as the only live and featured tool", () => {
-    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal"]);
+    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last"]);
     expect(getFeaturedCalculator().slug).toBe("compound-interest");
-    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(2);
+    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(3);
   });
 
   it("never produces links for unavailable tools", () => {
@@ -51,7 +51,10 @@ describe("calculator catalog", () => {
     const savingsGoal = related.find((c) => c.slug === "savings-goal");
     expect(savingsGoal?.availability).toBe("live");
     expect(calculatorHref(savingsGoal!)).toBe("/calculators/savings-goal");
-    const plannedTool = related.find((c) => c.slug === "how-long-will-my-money-last");
+    const moneyDuration = related.find((c) => c.slug === "how-long-will-my-money-last");
+    expect(moneyDuration?.availability).toBe("live");
+    expect(calculatorHref(moneyDuration!)).toBe("/calculators/how-long-will-my-money-last");
+    const plannedTool = getListedCalculators().find((c) => c.availability === "planned");
     expect(plannedTool?.availability).toBe("planned");
     expect(calculatorHref(plannedTool!)).toBeUndefined();
   });
@@ -74,7 +77,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(noFeatured)).toThrow(/exactly one live featured/);
 
     const plannedFeatured = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedFeatured[2]!.featured = true;
+    plannedFeatured[3]!.featured = true;
     expect(() => assertCalculatorCatalogInvariants(plannedFeatured as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot be featured/);
 
     const missingRelated = mutableCatalog() as unknown as Array<Record<string, unknown>>;
@@ -90,7 +93,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(duplicateRelated as unknown as CalculatorDefinition[])).toThrow(/Duplicate related calculator/);
 
     const plannedRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedRoute[2]!.route = "/calculators/how-long-will-my-money-last";
+    plannedRoute[3]!.route = "/calculators/loan-payment-amortization";
     expect(() => assertCalculatorCatalogInvariants(plannedRoute as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot have a route/);
 
     const mismatchedLiveRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;

@@ -36,13 +36,14 @@ describe("formal site structure", () => {
   it("links the only live calculator and keeps planned tools non-interactive", () => {
     render(<CalculatorsPage />);
     const openButtons = screen.getAllByRole("link", { name: "Open calculator" });
-    expect(openButtons).toHaveLength(2);
+    expect(openButtons).toHaveLength(3);
     expect(openButtons[0]?.getAttribute("href")).toBe("/calculators/compound-interest");
-    expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
+        expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
+    expect(openButtons[2]?.getAttribute("href")).toBe("/calculators/how-long-will-my-money-last");
     const planned = screen.getByRole("heading", { name: "Planned tools by goal" }).closest("section");
     expect(planned).not.toBeNull();
     expect(within(planned!).queryAllByRole("link")).toHaveLength(0);
-    expect(within(planned!).getAllByText("Planned")).toHaveLength(2);
+    expect(within(planned!).getAllByText("Planned")).toHaveLength(1);
   });
 
   it("publishes truthful privacy and contact boundaries without a fabricated contact link", () => {
