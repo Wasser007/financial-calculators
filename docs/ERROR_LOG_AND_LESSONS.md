@@ -65,3 +65,20 @@
 * **预防机制**：
   1. 负向测试必须通过语义查找（如 \`catalog.find(c => c.availability === "planned")\`）获取目标，严禁硬编码数组索引。
   2. 目录中 planned 工具总数变化时，Roadmap 中关于 Planned 徽章数量的硬编码断言必须随之调整。
+
+---
+
+## 案例 8：`catalog.ts` 联合类型未在 JSX 中自动收窄
+* **现象**：`components/site-header.tsx` 遍历 `getLiveCalculators()` 时，报 `TS2322: Type '... | null' is not assignable to type 'Url'`。
+* **根因**：`getLiveCalculators()` 返回类型为基类数组，TS 无法单凭过滤自动收窄联合类型分支（`route: null`）。
+* **预防机制**：
+  1. 在组件中消费 `calculator.route` 时，统一通过 `calculatorHref(calc)` 或 nullish coalescing（如 `calc.route ?? "/calculators"`）进行防御性收窄。
+
+---
+
+## 案例 9：全站样式硬编码 `min-width: 320px` 踩中移动端基石红线
+* **现象**：`tests/app/foundation.test.ts` 报错：`does not impose a 320px minimum width on the page`。
+* **根因**：为了让桌面端下拉面板显得饱满，直接使用了 `min-width: 320px`，触发了全站针对超窄屏（如 280px 折叠屏）防横向溢出的静态正则红线。
+* **预防机制**：
+  1. 全站任何组件严禁出现 `min-width: 320px` 字符串。
+  2. 宽度规范统一采用流式响应函数：`width: min(340px, calc(100vw - 2rem))`。

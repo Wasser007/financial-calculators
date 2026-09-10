@@ -1215,7 +1215,8 @@ a.button--secondary:active {
   top: calc(100% + 6px) !important;
   left: 0 !important;
   width: max-content !important;
-  min-width: 320px !important;
+  width: min(340px, calc(100vw - 2rem)) !important;
+  min-width: 260px !important;
   max-width: 420px !important;
   background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
   border: 1px solid rgba(203, 213, 225, 0.85) !important;
@@ -1315,4 +1316,100 @@ a.button--secondary:active {
 
 .all-tools-link:hover {
   background: #ecfdf5 !important;
+}
+
+/* ==========================================================================
+   Directory 3-Column Grid & Vertical 3D Tool Cards
+   ========================================================================== */
+
+/* 1. Live 工具 3 列响应式网格 */
+.live-tools-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 1.5rem !important;
+  margin-top: 1.5rem !important;
+}
+
+@media (max-width: 1024px) {
+  .live-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .live-tools-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 2. 卡片改为竖向弹性布局，高度自然包裹且按钮绝对沉底 */
+.live-tools-grid .tool-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 1.75rem 1.5rem !important;
+  min-height: 260px !important;
+  height: 100% !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 8px 20px -4px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+/* 悬停微动效：整卡上浮微升 */
+.live-tools-grid .tool-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(15, 118, 110, 0.4) !important;
+  box-shadow:
+    0 14px 30px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08) !important;
+}
+
+/* 内容文本区 */
+.live-tools-grid .tool-card > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.6rem !important;
+}
+
+.live-tools-grid .tool-card h3 {
+  font-size: 1.15rem !important;
+  font-weight: 750 !important;
+  color: #0f172a !important;
+  line-height: 1.35 !important;
+  margin: 0.25rem 0 0 !important;
+}
+
+.live-tools-grid .tool-card p {
+  color: #475569 !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* 徽章胶囊微光化 */
+.live-tools-grid .availability-badge {
+  align-self: flex-start !important;
+  background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%) !important;
+  color: #065f46 !important;
+  border: 1px solid rgba(167, 243, 208, 0.85) !important;
+  border-radius: 9999px !important;
+  padding: 0.2rem 0.65rem !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* 3. 按钮沉底并保持与全局 3D 胶囊按钮标准一致 */
+.live-tools-grid .tool-card .button {
+  margin-top: 1.5rem !important;
+  width: 100% !important; /* 紧凑卡片内按钮横向撑开，触控感极佳 */
+  text-align: center !important;
 }
