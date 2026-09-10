@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:core",
     "build:core": "tsc -p tsconfig.build.json",
-    "build:app": "next build --webpack && cp -r public/* .next/",
+    "build:app": "next build --webpack && node scripts/sync-static.js",
     "dev": "next dev --webpack",
     "start": "next start",
     "test": "vitest run",
