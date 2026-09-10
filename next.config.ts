@@ -3,13 +3,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  trailingSlash: true,
   outputFileTracingRoot: path.resolve(process.cwd()),
   poweredByHeader: false,
   typescript: {
     tsconfigPath: "tsconfig.app.json",
   },
-  turbopack: {},
   webpack(config) {
     config.cache = false;
     config.resolve.extensionAlias = {
