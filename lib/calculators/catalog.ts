@@ -79,14 +79,14 @@ export const calculatorCatalog = [
     },
   },
   {
-    slug: "loan-payment-amortization",
+    slug: "loan-mortgage-amortization",
     name: "Loan Payment & Amortization Calculator",
     shortDescription: "Explore estimated payments and how principal and interest change over a loan term.",
     goal: "Loans and debt",
-    availability: "planned",
+    availability: "live",
     featured: false,
     publicListing: true,
-    route: null,
+    route: "/calculators/loan-mortgage-amortization",
     relatedCalculators: ["loan-payoff"],
     metadata: {
       title: "Loan Payment & Amortization Calculator",
@@ -100,9 +100,9 @@ export const calculatorCatalog = [
     goal: "Loans and debt",
     availability: "planned",
     featured: false,
-    publicListing: false,
+    publicListing: true,
     route: null,
-    relatedCalculators: ["loan-payment-amortization"],
+    relatedCalculators: ["loan-mortgage-amortization"],
     metadata: {
       title: "Loan Payoff Calculator",
       description: "Explore how payment choices may change a loan payoff timeline.",
@@ -162,7 +162,7 @@ export const calculatorCatalog = [
     featured: false,
     publicListing: false,
     route: null,
-    relatedCalculators: ["rent-vs-buy", "loan-payment-amortization"],
+    relatedCalculators: ["rent-vs-buy", "loan-mortgage-amortization"],
     metadata: {
       title: "Mortgage Calculator",
       description: "Explore estimated mortgage payments and total interest.",

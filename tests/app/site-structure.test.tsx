@@ -36,7 +36,7 @@ describe("formal site structure", () => {
   it("links the only live calculator and keeps planned tools non-interactive", () => {
     render(<CalculatorsPage />);
     const openButtons = screen.getAllByRole("link", { name: "Open calculator" });
-    expect(openButtons).toHaveLength(3);
+    expect(openButtons).toHaveLength(4);
     expect(openButtons[0]?.getAttribute("href")).toBe("/calculators/compound-interest");
         expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
     expect(openButtons[2]?.getAttribute("href")).toBe("/calculators/how-long-will-my-money-last");
