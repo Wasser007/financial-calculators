@@ -26,6 +26,11 @@
 
 ---
 
+
+### 1.5 自动样式套用原则（Zero-CSS Burden）
+* **卡片命名规范**：只要包含 `-card` 结尾的容器（如 `info-card`, `summary-card`），CSS 会通过通配符属性选择器 `[class*="-card"]` 自动注入 3D 微光与环境阴影，无需单独为其写 CSS。
+* **组件化使用**：推荐优先使用统一封装的 `<Card interactive>` 与 `<Button variant="primary">`，杜绝孤立重复 CSS。
+
 ## 2. 标准代码模板 (Copy-Paste Ready)
 
 ### 2.1 表单输入控件标准骨架

@@ -965,3 +965,112 @@ button.button--ghost:active {
   display: flex !important;
   gap: 3.5rem !important;
 }
+
+/* ==========================================================================
+   Related Links & Related Tools Cards 3D Elevation
+   ========================================================================== */
+
+/* 1. Methodology & Disclaimer 边界说明卡片 */
+.related-links a {
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: var(--radius-md, 12px) !important;
+  padding: 1rem 1.25rem !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 4px 10px -2px rgba(15, 23, 42, 0.05) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease !important;
+}
+
+.related-links a:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(15, 118, 110, 0.4) !important;
+  box-shadow:
+    0 8px 20px -4px rgba(15, 23, 42, 0.1),
+    0 3px 8px -2px rgba(15, 118, 110, 0.08) !important;
+}
+
+/* 2. 底部相关推荐计算器卡片 */
+.related-tools__list > a {
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  padding: 1.25rem 1.4rem !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 16px -4px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+}
+
+.related-tools__list > a:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(15, 118, 110, 0.4) !important;
+  box-shadow:
+    0 12px 28px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08) !important;
+}
+
+/* ==========================================================================
+   Universal Primitives: Auto-Theme for All Cards & Buttons
+   ========================================================================== */
+
+/* 1. 全局卡片自动套用规则
+   凡是 class 名带有 "-card" 结尾的，或拥有 .ui-card 的元素，
+   一律自动获得统一的微光背景、精致圆角与环境投影 */
+[class*="-card"],
+.ui-card {
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 6px 16px -4px rgba(15, 23, 42, 0.06);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease;
+}
+
+/* 凡是可点击的卡片（卡片本身是链接，或者带有 .is-interactive / .tool-card--live 等）
+   鼠标悬停一律自动 3D 上浮并透出品牌微绿高光 */
+a[class*="-card"],
+[class*="-card"]:has(a.stretched-link):hover,
+.ui-card--interactive:hover {
+  transform: translateY(-4px);
+  border-color: rgba(15, 118, 110, 0.4);
+  box-shadow:
+    0 12px 28px -6px rgba(15, 23, 42, 0.12),
+    0 4px 12px -2px rgba(15, 118, 110, 0.08);
+}
+
+/* 2. 全局通用交互链接块（如 related-links 这种带箭头的导航行卡片） */
+.ui-link-row,
+.related-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 100%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-md, 12px);
+  padding: 0.85rem 1.25rem;
+  text-decoration: none !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+}
+
+.ui-link-row:hover,
+.related-links a:hover {
+  transform: translateY(-3px);
+  border-color: rgba(15, 118, 110, 0.4);
+  box-shadow:
+    0 8px 20px -4px rgba(15, 23, 42, 0.1),
+    0 3px 8px -2px rgba(15, 118, 110, 0.08);
+}
