@@ -1074,3 +1074,39 @@ a[class*="-card"],
     0 8px 20px -4px rgba(15, 23, 42, 0.1),
     0 3px 8px -2px rgba(15, 118, 110, 0.08);
 }
+
+/* ==========================================================================
+   Universal Calculator Workspace Layout & Equal Height Rule
+   ========================================================================== */
+
+/* 1. 顶部标题间距保护，避免被固定导航栏遮挡 */
+.calculator-workspace {
+  padding-top: 1.5rem;
+}
+
+.calculator-heading {
+  margin-bottom: 1.75rem;
+}
+
+/* 2. 左右卡片强制等高拉伸（Desktop 端） */
+@media (min-width: 901px) {
+  .calculator-layout {
+    align-items: stretch !important;
+  }
+
+  .calculator-layout > .input-card,
+  .calculator-layout > .results-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* 让结果卡片的内容区自适应，并将底部的免责声明沉底对齐 */
+  .results-card {
+    justify-content: space-between !important;
+  }
+
+  .results-card .illustration-note {
+    margin-top: auto !important;
+  }
+}
