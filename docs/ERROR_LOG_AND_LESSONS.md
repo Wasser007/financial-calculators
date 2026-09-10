@@ -82,3 +82,10 @@
 * **预防机制**：
   1. 全站任何组件严禁出现 `min-width: 320px` 字符串。
   2. 宽度规范统一采用流式响应函数：`width: min(340px, calc(100vw - 2rem))`。
+
+---
+
+## 案例 10：静态导出与 Node 服务配置混合导致平台构建失败
+* **现象**：Cloudflare Pages 报错 \`Error: Output directory "out" not found\`。
+* **根因**：Next.js 配置写死了 \`output: "standalone"\`，导致产物生成在 \`.next\`，而托管平台仅抓取 \`out/\`。
+* **预防机制**：通过环境变量让生产构建自动启动 \`output: "export"\`，并配合 \`public/_headers\` 保障静态部署安全头，彻底消除人工维护环境差异的心智负担。
