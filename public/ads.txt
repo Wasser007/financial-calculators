@@ -1,3 +1,2 @@
 # Google AdSense Publisher ID
-# 审核通过获得发布商 ID 后，将 pub-xxxxxxxxxxxxxxxx 替换为你的真实 ID
-google.com, pub-xxxxxxxxxxxxxxxx, DIRECT, f08c47fec0942fa0
+google.com, pub-2772154244281806, DIRECT, f08c47fec0942fa0
