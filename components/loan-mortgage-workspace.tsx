@@ -248,7 +248,7 @@ export function LoanMortgageWorkspace() {
 
             <div className="form-actions">
               <button type="submit" className="button button--primary">Recalculate</button>
-              <button type="button" className="button button--ghost" onClick={handleReset}>Reset</button>
+              <button type="button" className="button button--secondary" onClick={handleReset}>Reset</button>
             </div>
           </form>
         </div>

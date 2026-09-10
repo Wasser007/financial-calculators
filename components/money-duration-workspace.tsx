@@ -232,7 +232,7 @@ export function MoneyDurationWorkspace() {
               <button type="submit" className="button button--primary">
                 Recalculate
               </button>
-              <button type="button" className="button button--ghost" onClick={handleReset}>
+              <button type="button" className="button button--secondary" onClick={handleReset}>
                 Reset
               </button>
             </div>
