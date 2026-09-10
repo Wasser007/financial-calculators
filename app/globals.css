@@ -1413,3 +1413,19 @@ a.button--secondary:active {
   width: 100% !important; /* 紧凑卡片内按钮横向撑开，触控感极佳 */
   text-align: center !important;
 }
+
+
+/* ==========================================================================
+   Directory Page Spacing Optimization
+   ========================================================================== */
+.directory-page .directory-section:first-of-type {
+  margin-top: 2rem !important;
+}
+
+.directory-page .section-heading {
+  margin-bottom: 0.75rem !important;
+}
+
+.directory-page .section-heading .eyebrow {
+  margin-bottom: 0.25rem !important;
+}
