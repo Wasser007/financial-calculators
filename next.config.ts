@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   typescript: {
     tsconfigPath: "tsconfig.app.json",
   },
+  turbopack: {},
   webpack(config) {
     config.cache = false;
     config.resolve.extensionAlias = {
