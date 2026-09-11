@@ -89,3 +89,26 @@
 * **现象**：Cloudflare Pages 报错 \`Error: Output directory "out" not found\`。
 * **根因**：Next.js 配置写死了 \`output: "standalone"\`，导致产物生成在 \`.next\`，而托管平台仅抓取 \`out/\`。
 * **预防机制**：通过环境变量让生产构建自动启动 \`output: "export"\`，并配合 \`public/_headers\` 保障静态部署安全头，彻底消除人工维护环境差异的心智负担。
+
+
+## 核心架构原则：禁止重新发明页面骨架（Single Source of Truth）
+
+1. **统一母版约束**：
+   - 严禁在 `app/calculators/[slug]/page.tsx` 中手写裸 HTML (`<main>`, `<h1>`, 面包屑等)。
+   - 路由入口必须仅作为转发层：
+     ```tsx
+     import { createPageMetadata } from "../../../lib/seo/publication";
+     export const metadata = createPageMetadata("/calculators/[slug]");
+     export default function Page() { return <[Name]Page />; }
+     ```
+   - 页面实现必须统一位于 `app/[slug]-page.tsx`，且必须 100% 消费 `components/templates/CalculatorPageTemplate`。
+
+2. **设计系统同步性**：
+   - 页面容器宽度、排版间距、页头徽章、SEO 结构化数据、FAQ 排版由 `CalculatorPageTemplate` 单一真理源集中管控。
+   - 对母版的任何 UI 优化，必须且只能自动扩散至所有已上线工具，杜绝各工具样式分叉。
+
+
+### 严防 CSS 类名漂移（Class Drift）
+- **左侧输入容器**：必须且只能使用 `className="input-card"`（禁止使用 `form-card`、`inputs-container` 等任何衍生类名）。
+- **右侧结果容器**：必须且只能使用 `className="results-card"`。
+- **排查原则**：任何新页面如果丢失了白色卡片外框或阴影，第一动作必须是 `git grep` 对齐已有页面的类名，严禁手工拼写未在 `globals.css` 注册的选择器。

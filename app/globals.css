@@ -1576,3 +1576,10 @@ a.button--secondary:active {
 .stepper-btn:active {
   transform: scale(0.92);
 }
+
+
+.control-wrap .control-adornment--suffix {
+  right: 0.85rem !important;
+  left: auto !important;
+  pointer-events: none;
+}

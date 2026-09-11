@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import { StepperButtons } from "../stepper-buttons.js";
 
 export interface NumericFieldProps {
@@ -45,6 +46,12 @@ export function NumericField({
   const hasPrefix = Boolean(prefix);
   const hasSuffix = Boolean(suffix);
 
+  // 动态内联计算左内边距，根据前缀字符数精确留白，彻底免疫单字符($)与多字符(USD)冲突
+  const calculatedPaddingLeft = useMemo(() => {
+    if (!hasPrefix || !prefix) return undefined;
+    return prefix.length > 1 ? `${prefix.length * 0.75 + 1.25}rem` : "2.4rem";
+  }, [hasPrefix, prefix]);
+
   return (
     <div className="field">
       <div className="field__header">
@@ -75,7 +82,11 @@ export function NumericField({
               handleStep(-step);
             }
           }}
-          className={`control-input ${hasPrefix ? "has-prefix" : ""} ${hasSuffix ? "has-suffix" : ""} has-stepper`.trim()}
+          style={{
+            ...(calculatedPaddingLeft ? { paddingLeft: calculatedPaddingLeft } : {}),
+            ...(hasSuffix ? { paddingRight: "2.5rem" } : {}),
+          }}
+          className={`control-input ${hasPrefix ? "has-prefix" : ""} ${hasSuffix ? "has-suffix" : ""} ${!hasSuffix ? "has-stepper" : ""}`.trim()}
           aria-describedby={
             [
               helpText ? `${id}-help` : null,
@@ -89,10 +100,12 @@ export function NumericField({
             {suffix}
           </span>
         )}
-        <StepperButtons
-          onStepUp={() => handleStep(step)}
-          onStepDown={() => handleStep(-step)}
-        />
+        {!hasSuffix && (
+          <StepperButtons
+            onStepUp={() => handleStep(step)}
+            onStepDown={() => handleStep(-step)}
+          />
+        )}
       </div>
       {helpText && <p className="field__help" id={`${id}-help`}>{helpText}</p>}
       {errorText && <p className="field__error" id={`${id}-error`}>{errorText}</p>}
