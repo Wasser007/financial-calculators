@@ -6,6 +6,7 @@ import {
   validateMoneyDurationForm,
   type MoneyDurationFormValues,
 } from "../lib/calculators/money-duration/schema.js";
+import { StepperButtons } from "./stepper-buttons.js";
 import { buildMoneyDurationPresentation } from "../lib/calculators/money-duration/presentation.js";
 
 const CURRENCY_OPTIONS = ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"];
@@ -29,6 +30,13 @@ export function MoneyDurationWorkspace() {
 
   const handleChange = (field: keyof MoneyDurationFormValues, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const adjustField = (field: keyof MoneyDurationFormValues, delta: number, min: number = 0, decimals: number = 0) => {
+    const current = parseFloat(form[field]) || 0;
+    const nextVal = Math.max(min, current + delta);
+    const formatted = decimals > 0 ? nextVal.toFixed(decimals) : String(Math.round(nextVal));
+    handleChange(field, formatted);
   };
 
   const handleReset = () => {
@@ -106,11 +114,12 @@ export function MoneyDurationWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-prefix"
+                    className="has-prefix has-stepper"
                     value={form.initialBalance}
                     onChange={(e) => handleChange("initialBalance", e.target.value)}
                     aria-describedby={validation.errors.initialBalance ? "initialBalance-error" : "initialBalance-help"}
                   />
+                  <StepperButtons onStepUp={() => adjustField("initialBalance", 5000, 1)} onStepDown={() => adjustField("initialBalance", -5000, 1)} />
                 </div>
                 <p className="field__help" id="initialBalance-help">Total current capital available before distributions begin.</p>
                 {validation.errors.initialBalance && (
@@ -131,11 +140,12 @@ export function MoneyDurationWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-prefix"
+                    className="has-prefix has-stepper"
                     value={form.monthlyWithdrawal}
                     onChange={(e) => handleChange("monthlyWithdrawal", e.target.value)}
                     aria-describedby={validation.errors.monthlyWithdrawal ? "monthlyWithdrawal-error" : "monthlyWithdrawal-help"}
                   />
+                  <StepperButtons onStepUp={() => adjustField("monthlyWithdrawal", 100, 1)} onStepDown={() => adjustField("monthlyWithdrawal", -100, 1)} />
                 </div>
                 <p className="field__help" id="monthlyWithdrawal-help">Target cash withdrawal expected each month.</p>
                 {validation.errors.monthlyWithdrawal && (
@@ -159,11 +169,12 @@ export function MoneyDurationWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-suffix"
+                    className="has-suffix has-stepper"
                     value={form.annualReturnRatePct}
                     onChange={(e) => handleChange("annualReturnRatePct", e.target.value)}
                     aria-describedby={validation.errors.annualReturnRatePct ? "annualReturn-error" : "annualReturn-help"}
                   />
+                  <StepperButtons onStepUp={() => adjustField("annualReturnRatePct", 0.1, 0, 1)} onStepDown={() => adjustField("annualReturnRatePct", -0.1, 0, 1)} />
                   <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
                 </div>
                 <p className="field__help" id="annualReturn-help">Expected annual nominal investment yield or portfolio return.</p>
@@ -184,11 +195,12 @@ export function MoneyDurationWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-suffix"
+                    className="has-suffix has-stepper"
                     value={form.annualInflationRatePct}
                     onChange={(e) => handleChange("annualInflationRatePct", e.target.value)}
                     aria-describedby={validation.errors.annualInflationRatePct ? "inflation-error" : "inflation-help"}
                   />
+                  <StepperButtons onStepUp={() => adjustField("annualInflationRatePct", 0.1, 0, 1)} onStepDown={() => adjustField("annualInflationRatePct", -0.1, 0, 1)} />
                   <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
                 </div>
                 <p className="field__help" id="inflation-help">Annual escalation applied to monthly withdrawals to maintain purchasing power.</p>

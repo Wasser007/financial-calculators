@@ -13,7 +13,7 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.app.json --noEmit",
     "rules": "cat docs/DEVELOPMENT_GOLDEN_RULES.md",
-    "verify": "npm run typecheck && npm run test && npm run build:app"
+    "verify": "node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc --noEmit && node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit && node --max-old-space-size=4096 ./node_modules/vitest/vitest.mjs run --no-file-parallelism && npm run build:app"
   },
   "devDependencies": {
     "@emnapi/runtime": "^1.11.3",

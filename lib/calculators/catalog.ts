@@ -98,10 +98,10 @@ export const calculatorCatalog = [
     name: "Loan Payoff Calculator",
     shortDescription: "Explore how extra payments may change a payoff date and interest cost.",
     goal: "Loans and debt",
-    availability: "planned",
+    availability: "live",
     featured: false,
     publicListing: true,
-    route: null,
+    route: "/calculators/loan-payoff",
     relatedCalculators: ["loan-mortgage-amortization"],
     metadata: {
       title: "Loan Payoff Calculator",
@@ -115,7 +115,7 @@ export const calculatorCatalog = [
     goal: "Rates and returns",
     availability: "planned",
     featured: false,
-    publicListing: false,
+    publicListing: true,
     route: null,
     relatedCalculators: ["cagr", "compound-interest"],
     metadata: {

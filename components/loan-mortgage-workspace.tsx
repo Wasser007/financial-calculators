@@ -1,4 +1,5 @@
 "use client";
+import { StepperButtons } from "./stepper-buttons.js";
 
 import { useMemo, useState } from "react";
 import { calculateLoan } from "../lib/calculators/loan-amortization/math";
@@ -75,6 +76,13 @@ export function LoanMortgageWorkspace() {
     return showFullSchedule ? result.schedule : result.schedule.slice(0, 12);
   }, [result.schedule, showFullSchedule]);
 
+    const adjustField = (field: keyof FormState, delta: number, min: number = 0, decimals: number = 0) => {
+    const current = parseFloat(form[field]) || 0;
+    const nextVal = Math.max(min, current + delta);
+    const formatted = decimals > 0 ? nextVal.toFixed(decimals) : String(Math.round(nextVal));
+    setForm((prev) => ({ ...prev, [field]: formatted }));
+  };
+
   const handleReset = () => {
     setForm({
       currency: "USD",
@@ -149,11 +157,12 @@ export function LoanMortgageWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-prefix"
+                    className="has-prefix has-stepper"
                     value={form.loanAmount}
                     onChange={(e) => setForm((prev) => ({ ...prev, loanAmount: e.target.value }))}
                     aria-describedby="loanAmount-help"
                   />
+                  <StepperButtons onStepUp={() => adjustField("loanAmount", 5000, 1000)} onStepDown={() => adjustField("loanAmount", -5000, 1000)} />
                 </div>
                 <p className="field__help" id="loanAmount-help">Total principal borrowed.</p>
               </div>
@@ -168,11 +177,12 @@ export function LoanMortgageWorkspace() {
                       type="text"
                       inputMode="decimal"
                       autoComplete="off"
-                      className="has-suffix"
+                      className="has-suffix has-stepper"
                       value={form.annualInterestRate}
                       onChange={(e) => setForm((prev) => ({ ...prev, annualInterestRate: e.target.value }))}
                       aria-describedby="rate-help"
                     />
+                    <StepperButtons onStepUp={() => adjustField("annualInterestRate", 0.1, 0.1, 1)} onStepDown={() => adjustField("annualInterestRate", -0.1, 0.1, 1)} />
                     <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
                   </div>
                   <p className="field__help" id="rate-help">Fixed nominal annual borrowing rate (APR).</p>
@@ -236,11 +246,12 @@ export function LoanMortgageWorkspace() {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    className="has-prefix"
+                    className="has-prefix has-stepper"
                     value={form.extraMonthlyPayment}
                     onChange={(e) => setForm((prev) => ({ ...prev, extraMonthlyPayment: e.target.value }))}
                     aria-describedby="extra-help"
                   />
+                  <StepperButtons onStepUp={() => adjustField("extraMonthlyPayment", 50, 0)} onStepDown={() => adjustField("extraMonthlyPayment", -50, 0)} />
                 </div>
                 <p className="field__help" id="extra-help">Additional amount paid directly toward principal each month.</p>
               </div>

@@ -26,9 +26,9 @@ describe("calculator catalog", () => {
   });
 
   it("keeps compound interest as the only live and featured tool", () => {
-    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization"]);
+    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization", "loan-payoff"]);
     expect(getFeaturedCalculator().slug).toBe("compound-interest");
-    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(4);
+    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(5);
   });
 
   it("never produces links for unavailable tools", () => {
@@ -77,7 +77,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(noFeatured)).toThrow(/exactly one live featured/);
 
     const plannedFeatured = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedFeatured[4]!.featured = true;
+    plannedFeatured[5]!.featured = true;
     expect(() => assertCalculatorCatalogInvariants(plannedFeatured as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot be featured/);
 
     const missingRelated = mutableCatalog() as unknown as Array<Record<string, unknown>>;
@@ -93,7 +93,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(duplicateRelated as unknown as CalculatorDefinition[])).toThrow(/Duplicate related calculator/);
 
     const plannedRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedRoute[4]!.route = "/calculators/loan-payoff";
+    plannedRoute[5]!.route = "/calculators/apy-effective-interest-rate";
     expect(() => assertCalculatorCatalogInvariants(plannedRoute as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot have a route/);
 
     const mismatchedLiveRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;
