@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { NumericField } from "./ui/numeric-field.js";
 import {
   SAVINGS_GOAL_DEFAULTS,
   validateSavingsGoalForm,
@@ -62,181 +63,112 @@ export function SavingsGoalWorkspace() {
             <fieldset className="form-step">
               <legend><span>1</span> Starting amount</legend>
 
-              {/* 第一步：币种与数字格式 */}
               <div className="field-grid field-grid--two">
                 <div className="field">
                   <label htmlFor="currency">Currency</label>
-                  <select
-                    id="currency"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                  >
-                    {CURRENCY_OPTIONS.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                  <div className="control-wrap">
+                    <select
+                      id="currency"
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                    >
+                      {CURRENCY_OPTIONS.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
                   <p className="field__help">Changes currency symbols only.</p>
                 </div>
 
                 <div className="field">
                   <label htmlFor="locale">Number format</label>
-                  <select
-                    id="locale"
-                    value={locale}
-                    onChange={(e) => setLocale(e.target.value)}
-                  >
-                    {LOCALE_OPTIONS.map((loc) => (
-                      <option key={loc.value} value={loc.value}>{loc.label}</option>
-                    ))}
-                  </select>
+                  <div className="control-wrap">
+                    <select
+                      id="locale"
+                      value={locale}
+                      onChange={(e) => setLocale(e.target.value)}
+                    >
+                      {LOCALE_OPTIONS.map((loc) => (
+                        <option key={loc.value} value={loc.value}>{loc.label}</option>
+                      ))}
+                    </select>
+                  </div>
                   <p className="field__help">Changes number formatting only.</p>
                 </div>
-              </div>
 
-              {/* 目标金额 */}
-              <div className="field">
-                <label htmlFor="targetAmount">Savings Target ($)</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
-                  <input
-                    id="targetAmount"
-                    name="targetAmount"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix"
-                    value={form.targetAmount}
-                    onChange={(e) => handleChange("targetAmount", e.target.value)}
-                    aria-describedby={validation.errors.targetAmount ? "targetAmount-error" : "targetAmount-help"}
-                  />
-                </div>
-                <p className="field__help" id="targetAmount-help">The final accumulated amount you are targeting.</p>
-                {validation.errors.targetAmount && (
-                  <p id="targetAmount-error" className="field__error">
-                    {validation.errors.targetAmount}
-                  </p>
-                )}
-              </div>
+                <NumericField
+                  id="targetAmount"
+                  name="targetAmount"
+                  label="Savings Target ($)"
+                  value={form.targetAmount}
+                  prefix={currency}
+                  step={1000}
+                  min={1}
+                  helpText="The final accumulated amount you are targeting."
+                  errorText={validation.errors.targetAmount}
+                  onChange={(val) => handleChange("targetAmount", val)}
+                />
 
-              {/* 初始本金 */}
-              <div className="field">
-                <label htmlFor="initialBalance">Initial Starting Balance ($)</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
-                  <input
-                    id="initialBalance"
-                    name="initialBalance"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix"
-                    value={form.initialBalance}
-                    onChange={(e) => handleChange("initialBalance", e.target.value)}
-                    aria-describedby={validation.errors.initialBalance ? "initialBalance-error" : "initialBalance-help"}
-                  />
-                </div>
-                <p className="field__help" id="initialBalance-help">Amount already saved before recurring deposits.</p>
-                {validation.errors.initialBalance && (
-                  <p id="initialBalance-error" className="field__error">
-                    {validation.errors.initialBalance}
-                  </p>
-                )}
+                <NumericField
+                  id="initialBalance"
+                  name="initialBalance"
+                  label="Initial Starting Balance ($)"
+                  value={form.initialBalance}
+                  prefix={currency}
+                  step={500}
+                  min={0}
+                  helpText="Amount already saved before recurring deposits."
+                  errorText={validation.errors.initialBalance}
+                  onChange={(val) => handleChange("initialBalance", val)}
+                />
               </div>
             </fieldset>
 
             <fieldset className="form-step">
-              <legend><span>2</span> Timeline & returns</legend>
+              <legend><span>2</span> Timeline &amp; returns</legend>
 
-              {/* 期限：年数与月数 */}
               <div className="field-grid field-grid--two">
-                <div className="field">
-                  <label htmlFor="years">Years</label>
-                  <div className="control-wrap">
-                    <input
-                      id="years"
-                      name="years"
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="off"
-                      value={form.years}
-                      onChange={(e) => handleChange("years", e.target.value)}
-                    />
-                  </div>
-                </div>
+                <NumericField
+                  id="years"
+                  name="years"
+                  label="Years"
+                  value={form.years}
+                  step={1}
+                  min={0}
+                  helpText="Time horizon years."
+                  onChange={(val) => handleChange("years", val)}
+                />
 
-                <div className="field">
-                  <label htmlFor="months">Months</label>
-                  <div className="control-wrap">
-                    <input
-                      id="months"
-                      name="months"
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="off"
-                      value={form.months}
-                      onChange={(e) => handleChange("months", e.target.value)}
-                    />
-                  </div>
-                </div>
+                <NumericField
+                  id="months"
+                  name="months"
+                  label="Months"
+                  value={form.months}
+                  step={1}
+                  min={0}
+                  helpText="Additional months."
+                  onChange={(val) => handleChange("months", val)}
+                />
+
+                <NumericField
+                  id="annualReturnRate"
+                  name="annualReturnRate"
+                  label="Estimated Annual Return (%)"
+                  value={form.annualReturnRatePct}
+                  suffix="%"
+                  step={0.1}
+                  min={0}
+                  decimals={1}
+                  helpText="Expected annual rate of return or yield."
+                  errorText={validation.errors.annualReturnRatePct}
+                  onChange={(val) => handleChange("annualReturnRatePct", val)}
+                />
               </div>
-              <p className="field__help">Time horizon to reach your target savings goal.</p>
               {validation.errors.duration && (
-                <p className="field__error" role="alert">
+                <p className="field__error" role="alert" style={{ marginTop: "0.5rem" }}>
                   {validation.errors.duration}
                 </p>
               )}
-
-              {/* 预估年化收益率 */}
-              <div className="field">
-                <label htmlFor="annualReturnRate">Estimated Annual Return (%)</label>
-                <div className="control-wrap">
-                  <input
-                    id="annualReturnRate"
-                    name="annualReturnRate"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-suffix"
-                    value={form.annualReturnRatePct}
-                    onChange={(e) => handleChange("annualReturnRatePct", e.target.value)}
-                    aria-describedby={validation.errors.annualReturnRatePct ? "annualReturnRate-error" : "annualReturnRate-help"}
-                  />
-                  <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
-                </div>
-                <p className="field__help" id="annualReturnRate-help">Expected annual rate of return or yield.</p>
-                {validation.errors.annualReturnRatePct && (
-                  <p id="annualReturnRate-error" className="field__error">
-                    {validation.errors.annualReturnRatePct}
-                  </p>
-                )}
-              </div>
-
-              {/* 存款时点 */}
-              <fieldset className="timing-fieldset">
-                <legend>Deposit Timing</legend>
-                <div className="segmented-control" role="radiogroup">
-                  <label>
-                    <input
-                      type="radio"
-                      name="depositTiming"
-                      value="beginning"
-                      checked={form.depositTiming === "beginning"}
-                      onChange={(e) => handleChange("depositTiming", e.target.value)}
-                    />
-                    <span>Beginning of month</span>
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="depositTiming"
-                      value="end"
-                      checked={form.depositTiming === "end"}
-                      onChange={(e) => handleChange("depositTiming", e.target.value)}
-                    />
-                    <span>End of month</span>
-                  </label>
-                </div>
-              </fieldset>
             </fieldset>
 
             {/* 操作栏 */}

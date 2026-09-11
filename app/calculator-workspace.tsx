@@ -1,5 +1,7 @@
 "use client";
 
+import { NumericField } from "../components/ui/numeric-field.js";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import dynamic from "next/dynamic";
@@ -102,6 +104,18 @@ function issueFor(errors: ValidationIssue[], field: keyof Drafts): ValidationIss
 function describedBy(field: keyof Drafts, visibleError: boolean): string {
   return visibleError ? `${field}-help ${field}-error` : `${field}-help`;
 }
+
+
+const FIELD_STEPS: Record<string, { step: number; min?: number; decimals?: number }> = {
+  initialPrincipal: { step: 500, min: 0, decimals: 2 },
+  monthlyContribution: { step: 100, min: 0, decimals: 2 },
+  annualContribution: { step: 500, min: 0, decimals: 2 },
+  annualInterestRatePct: { step: 0.1, min: 0, decimals: 2 },
+  durationMonths: { step: 1, min: 0, decimals: 0 },
+  nominalAnnualFeeRate: { step: 0.05, min: 0, decimals: 2 },
+  varianceAnnualInterestRatePct: { step: 0.1, min: 0, decimals: 2 },
+  annualInflationRatePct: { step: 0.1, min: 0, decimals: 2 },
+};
 
 export function CalculatorWorkspace() {
   const [drafts, setDrafts] = useState<Drafts>(defaultDrafts);
@@ -239,28 +253,32 @@ export function CalculatorWorkspace() {
   ) => {
     const issue = issueFor(errors, field);
     const visibleError = issue !== undefined && (submitted || blurred.has(field));
+    const config = FIELD_STEPS[field] ?? { step: 1 };
+
     return (
-      <div className="field" key={field}>
-        <label htmlFor={field}>{label}{adornment?.optional && <span className="field__optional">Optional</span>}</label>
-        <div className="control-wrap">
-          {adornment?.prefix && <span className="control-adornment control-adornment--prefix" aria-hidden="true">{adornment.prefix}</span>}
-          <input
-            className={adornment?.prefix ? "has-prefix" : adornment?.suffix ? "has-suffix" : undefined}
-            id={field}
-            name={field}
-            type="text"
-            inputMode="decimal"
-            autoComplete="off"
-            value={drafts[field]}
-            onChange={handleControlChange}
-            aria-invalid={visibleError || undefined}
-            aria-describedby={describedBy(field, visibleError)}
-          />
-          {adornment?.suffix && <span className="control-adornment control-adornment--suffix" aria-hidden="true">{adornment.suffix}</span>}
-        </div>
-        <p className="field__help" id={`${field}-help`}>{help}</p>
-        {visibleError && issue !== undefined && <p className="field__error" id={`${field}-error`}>{issue.message}</p>}
-      </div>
+      <NumericField
+        key={field}
+        id={field}
+        name={field}
+        label={label}
+        value={drafts[field]}
+        helpText={help}
+        errorText={visibleError && issue !== undefined ? issue.message : undefined}
+        prefix={adornment?.prefix}
+        suffix={adornment?.suffix}
+        optional={adornment?.optional}
+        step={config.step}
+        min={config.min}
+        decimals={config.decimals}
+        onBlur={() => setBlurred((prev) => new Set(prev).add(field))}
+        onChange={(val: string) => {
+          const fakeTarget = { name: field, value: val };
+          handleControlChange({
+            target: fakeTarget,
+            currentTarget: fakeTarget,
+          } as unknown as ChangeEvent<HTMLInputElement>);
+        }}
+      />
     );
   };
 
@@ -324,8 +342,8 @@ export function CalculatorWorkspace() {
                   </select>
                   <p className="field__help" id="presentation-locale-help">Changes number formatting only. It does not change the currency, content language, or calculation.</p>
                 </div>
+                {textInput("initialPrincipal", "Starting balance", "Amount invested before recurring contributions.", { prefix: drafts.currency })}
               </div>
-              {textInput("initialPrincipal", "Starting balance", "Amount invested before recurring contributions.", { prefix: drafts.currency })}
             </fieldset>
 
             <fieldset className="form-step">
