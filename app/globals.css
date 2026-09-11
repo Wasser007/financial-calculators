@@ -297,7 +297,7 @@ input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity:
 .has-suffix { padding-right: 4.25rem !important; }
 .control-adornment { position: absolute; z-index: 1; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .875rem; font-weight: 800; pointer-events: none; }
 .control-adornment--prefix { left: .85rem; border-right: 1px solid var(--line); padding-right: .7rem; }
-.control-adornment--suffix { right: .85rem; }
+.control-adornment--suffix { right: 2.25rem; }
 .field__help, .field__error { margin: .4rem 0 0; font-size: .875rem; line-height: 1.45; }
 .field__help { color: var(--muted); }
 .field__error { color: var(--danger); font-weight: 700; }
