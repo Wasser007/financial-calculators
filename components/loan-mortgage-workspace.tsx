@@ -1,5 +1,5 @@
 "use client";
-import { StepperButtons } from "./stepper-buttons.js";
+import { NumericField } from "./ui/numeric-field.js";
 
 import { useMemo, useState } from "react";
 import { calculateLoan } from "../lib/calculators/loan-amortization/math";
@@ -76,13 +76,7 @@ export function LoanMortgageWorkspace() {
     return showFullSchedule ? result.schedule : result.schedule.slice(0, 12);
   }, [result.schedule, showFullSchedule]);
 
-    const adjustField = (field: keyof FormState, delta: number, min: number = 0, decimals: number = 0) => {
-    const current = parseFloat(form[field]) || 0;
-    const nextVal = Math.max(min, current + delta);
-    const formatted = decimals > 0 ? nextVal.toFixed(decimals) : String(Math.round(nextVal));
-    setForm((prev) => ({ ...prev, [field]: formatted }));
-  };
-
+  
   const handleReset = () => {
     setForm({
       currency: "USD",
@@ -147,46 +141,32 @@ export function LoanMortgageWorkspace() {
                 </div>
               </div>
 
-              <div className="field">
-                <label htmlFor="loanAmount">Loan Amount ({currentCurrency.symbol})</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currentCurrency.symbol}</span>
-                  <input
-                    id="loanAmount"
-                    name="loanAmount"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix has-stepper"
-                    value={form.loanAmount}
-                    onChange={(e) => setForm((prev) => ({ ...prev, loanAmount: e.target.value }))}
-                    aria-describedby="loanAmount-help"
-                  />
-                  <StepperButtons onStepUp={() => adjustField("loanAmount", 5000, 1000)} onStepDown={() => adjustField("loanAmount", -5000, 1000)} />
-                </div>
-                <p className="field__help" id="loanAmount-help">Total principal borrowed.</p>
-              </div>
+              <NumericField
+                id="loanAmount"
+                name="loanAmount"
+                label={`Loan Amount (${currentCurrency.symbol})`}
+                value={form.loanAmount}
+                prefix={currentCurrency.symbol}
+                step={5000}
+                min={1000}
+                decimals={0}
+                helpText="Total principal borrowed."
+                onChange={(val) => setForm((prev) => ({ ...prev, loanAmount: val }))}
+              />
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-                <div className="field">
-                  <label htmlFor="annualInterestRate">Annual interest rate (%)</label>
-                  <div className="control-wrap">
-                    <input
-                      id="annualInterestRate"
-                      name="annualInterestRate"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      className="has-suffix has-stepper"
-                      value={form.annualInterestRate}
-                      onChange={(e) => setForm((prev) => ({ ...prev, annualInterestRate: e.target.value }))}
-                      aria-describedby="rate-help"
-                    />
-                    <StepperButtons onStepUp={() => adjustField("annualInterestRate", 0.1, 0.1, 1)} onStepDown={() => adjustField("annualInterestRate", -0.1, 0.1, 1)} />
-                    <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
-                  </div>
-                  <p className="field__help" id="rate-help">Fixed nominal annual borrowing rate (APR).</p>
-                </div>
+              <div className="field-grid field-grid--two">
+                <NumericField
+                  id="annualInterestRate"
+                  name="annualInterestRate"
+                  label="Annual interest rate (%)"
+                  value={form.annualInterestRate}
+                  suffix="%"
+                  step={0.1}
+                  min={0.1}
+                  decimals={1}
+                  helpText="Fixed nominal annual borrowing rate (APR)."
+                  onChange={(val) => setForm((prev) => ({ ...prev, annualInterestRate: val }))}
+                />
 
                 <div className="field">
                   <label htmlFor="loanTermYears">Loan term</label>
@@ -236,25 +216,18 @@ export function LoanMortgageWorkspace() {
                 <p className="field__help">Fixed payment keeps monthly installments constant; equal principal pays down principal quicker.</p>
               </div>
 
-              <div className="field">
-                <label htmlFor="extraMonthlyPayment">Extra monthly payment ({currentCurrency.symbol})</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currentCurrency.symbol}</span>
-                  <input
-                    id="extraMonthlyPayment"
-                    name="extraMonthlyPayment"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix has-stepper"
-                    value={form.extraMonthlyPayment}
-                    onChange={(e) => setForm((prev) => ({ ...prev, extraMonthlyPayment: e.target.value }))}
-                    aria-describedby="extra-help"
-                  />
-                  <StepperButtons onStepUp={() => adjustField("extraMonthlyPayment", 50, 0)} onStepDown={() => adjustField("extraMonthlyPayment", -50, 0)} />
-                </div>
-                <p className="field__help" id="extra-help">Additional amount paid directly toward principal each month.</p>
-              </div>
+              <NumericField
+                id="extraMonthlyPayment"
+                name="extraMonthlyPayment"
+                label={`Extra monthly payment (${currentCurrency.symbol})`}
+                value={form.extraMonthlyPayment}
+                prefix={currentCurrency.symbol}
+                step={50}
+                min={0}
+                decimals={0}
+                helpText="Additional amount paid directly toward principal each month."
+                onChange={(val) => setForm((prev) => ({ ...prev, extraMonthlyPayment: val }))}
+              />
             </fieldset>
 
             <div className="form-actions">

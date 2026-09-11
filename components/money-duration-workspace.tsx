@@ -6,7 +6,7 @@ import {
   validateMoneyDurationForm,
   type MoneyDurationFormValues,
 } from "../lib/calculators/money-duration/schema.js";
-import { StepperButtons } from "./stepper-buttons.js";
+import { NumericField } from "./ui/numeric-field.js";
 import { buildMoneyDurationPresentation } from "../lib/calculators/money-duration/presentation.js";
 
 const CURRENCY_OPTIONS = ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"];
@@ -32,12 +32,6 @@ export function MoneyDurationWorkspace() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const adjustField = (field: keyof MoneyDurationFormValues, delta: number, min: number = 0, decimals: number = 0) => {
-    const current = parseFloat(form[field]) || 0;
-    const nextVal = Math.max(min, current + delta);
-    const formatted = decimals > 0 ? nextVal.toFixed(decimals) : String(Math.round(nextVal));
-    handleChange(field, formatted);
-  };
 
   const handleReset = () => {
     setForm(MONEY_DURATION_DEFAULTS);
@@ -103,113 +97,65 @@ export function MoneyDurationWorkspace() {
                 </div>
               </div>
 
-              {/* 初始总本金 */}
-              <div className="field">
-                <label htmlFor="initialBalance">Starting Portfolio Balance ($)</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
-                  <input
-                    id="initialBalance"
-                    name="initialBalance"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix has-stepper"
-                    value={form.initialBalance}
-                    onChange={(e) => handleChange("initialBalance", e.target.value)}
-                    aria-describedby={validation.errors.initialBalance ? "initialBalance-error" : "initialBalance-help"}
-                  />
-                  <StepperButtons onStepUp={() => adjustField("initialBalance", 5000, 1)} onStepDown={() => adjustField("initialBalance", -5000, 1)} />
-                </div>
-                <p className="field__help" id="initialBalance-help">Total current capital available before distributions begin.</p>
-                {validation.errors.initialBalance && (
-                  <p id="initialBalance-error" className="field__error">
-                    {validation.errors.initialBalance}
-                  </p>
-                )}
-              </div>
+              <NumericField
+                id="initialBalance"
+                name="initialBalance"
+                label="Starting Portfolio Balance"
+                value={form.initialBalance}
+                prefix={currency}
+                step={5000}
+                min={1}
+                decimals={0}
+                helpText="Total current capital available before distributions begin."
+                errorText={validation.errors.initialBalance || undefined}
+                onChange={(val) => handleChange("initialBalance", val)}
+              />
 
-              {/* 每月提取额 */}
-              <div className="field">
-                <label htmlFor="monthlyWithdrawal">Monthly Withdrawal Amount ($)</label>
-                <div className="control-wrap">
-                  <span className="control-adornment control-adornment--prefix" aria-hidden="true">{currency}</span>
-                  <input
-                    id="monthlyWithdrawal"
-                    name="monthlyWithdrawal"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-prefix has-stepper"
-                    value={form.monthlyWithdrawal}
-                    onChange={(e) => handleChange("monthlyWithdrawal", e.target.value)}
-                    aria-describedby={validation.errors.monthlyWithdrawal ? "monthlyWithdrawal-error" : "monthlyWithdrawal-help"}
-                  />
-                  <StepperButtons onStepUp={() => adjustField("monthlyWithdrawal", 100, 1)} onStepDown={() => adjustField("monthlyWithdrawal", -100, 1)} />
-                </div>
-                <p className="field__help" id="monthlyWithdrawal-help">Target cash withdrawal expected each month.</p>
-                {validation.errors.monthlyWithdrawal && (
-                  <p id="monthlyWithdrawal-error" className="field__error">
-                    {validation.errors.monthlyWithdrawal}
-                  </p>
-                )}
-              </div>
+              <NumericField
+                id="monthlyWithdrawal"
+                name="monthlyWithdrawal"
+                label="Monthly Withdrawal Amount"
+                value={form.monthlyWithdrawal}
+                prefix={currency}
+                step={100}
+                min={1}
+                decimals={0}
+                helpText="Target cash withdrawal expected each month."
+                errorText={validation.errors.monthlyWithdrawal || undefined}
+                onChange={(val) => handleChange("monthlyWithdrawal", val)}
+              />
             </fieldset>
 
             <fieldset className="form-step">
               <legend><span>2</span> Return & inflation assumptions</legend>
 
-              {/* 预期年收益率 */}
-              <div className="field">
-                <label htmlFor="annualReturnRatePct">Estimated Annual Return (%)</label>
-                <div className="control-wrap">
-                  <input
-                    id="annualReturnRatePct"
-                    name="annualReturnRatePct"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-suffix has-stepper"
-                    value={form.annualReturnRatePct}
-                    onChange={(e) => handleChange("annualReturnRatePct", e.target.value)}
-                    aria-describedby={validation.errors.annualReturnRatePct ? "annualReturn-error" : "annualReturn-help"}
-                  />
-                  <StepperButtons onStepUp={() => adjustField("annualReturnRatePct", 0.1, 0, 1)} onStepDown={() => adjustField("annualReturnRatePct", -0.1, 0, 1)} />
-                  <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
-                </div>
-                <p className="field__help" id="annualReturn-help">Expected annual nominal investment yield or portfolio return.</p>
-                {validation.errors.annualReturnRatePct && (
-                  <p id="annualReturn-error" className="field__error">
-                    {validation.errors.annualReturnRatePct}
-                  </p>
-                )}
-              </div>
+              <NumericField
+                id="annualReturnRatePct"
+                name="annualReturnRatePct"
+                label="Estimated Annual Return (%)"
+                value={form.annualReturnRatePct}
+                suffix="%"
+                step={0.1}
+                min={0}
+                decimals={1}
+                helpText="Expected annual nominal investment yield or portfolio return."
+                errorText={validation.errors.annualReturnRatePct || undefined}
+                onChange={(val) => handleChange("annualReturnRatePct", val)}
+              />
 
-              {/* 年化通胀率 */}
-              <div className="field">
-                <label htmlFor="annualInflationRatePct">Annual Inflation Adjustment (%)</label>
-                <div className="control-wrap">
-                  <input
-                    id="annualInflationRatePct"
-                    name="annualInflationRatePct"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    className="has-suffix has-stepper"
-                    value={form.annualInflationRatePct}
-                    onChange={(e) => handleChange("annualInflationRatePct", e.target.value)}
-                    aria-describedby={validation.errors.annualInflationRatePct ? "inflation-error" : "inflation-help"}
-                  />
-                  <StepperButtons onStepUp={() => adjustField("annualInflationRatePct", 0.1, 0, 1)} onStepDown={() => adjustField("annualInflationRatePct", -0.1, 0, 1)} />
-                  <span className="control-adornment control-adornment--suffix" aria-hidden="true">%</span>
-                </div>
-                <p className="field__help" id="inflation-help">Annual escalation applied to monthly withdrawals to maintain purchasing power.</p>
-                {validation.errors.annualInflationRatePct && (
-                  <p id="inflation-error" className="field__error">
-                    {validation.errors.annualInflationRatePct}
-                  </p>
-                )}
-              </div>
+              <NumericField
+                id="annualInflationRatePct"
+                name="annualInflationRatePct"
+                label="Annual Inflation Adjustment (%)"
+                value={form.annualInflationRatePct}
+                suffix="%"
+                step={0.1}
+                min={0}
+                decimals={1}
+                helpText="Annual escalation applied to monthly withdrawals to maintain purchasing power."
+                errorText={validation.errors.annualInflationRatePct || undefined}
+                onChange={(val) => handleChange("annualInflationRatePct", val)}
+              />
 
               {/* 支取时点 */}
               <fieldset className="timing-fieldset">
