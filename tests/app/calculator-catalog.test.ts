@@ -9,13 +9,13 @@ function mutableCatalog(): CalculatorDefinition[] {
 
 describe("calculator catalog", () => {
   it("centrally models the ten-tool product sequence and every required field", () => {
-    expect(calculatorCatalog).toHaveLength(10);
+    expect(calculatorCatalog).toHaveLength(11);
     expect(calculatorCatalog.map((calculator) => calculator.name)).toEqual([
       "Compound Interest Calculator", "Savings Goal Calculator", "How Long Will My Money Last?",
-      "Loan Payment & Amortization Calculator", "Loan Payoff Calculator", "APY / Effective Interest Rate Calculator",
+      "Loan Payment & Amortization Calculator", "Loan Payoff Calculator", "SIP / DCA Calculator", "APY / Effective Interest Rate Calculator",
       "CAGR Calculator", "Future Value Calculator", "Mortgage Calculator", "Rent vs Buy Calculator",
     ]);
-    expect(new Set(calculatorCatalog.map((calculator) => calculator.slug)).size).toBe(10);
+    expect(new Set(calculatorCatalog.map((calculator) => calculator.slug)).size).toBe(11);
     for (const calculator of calculatorCatalog) {
       expect(calculatorGoals).toContain(calculator.goal);
       expect(calculator.shortDescription).not.toBe("");
@@ -26,9 +26,9 @@ describe("calculator catalog", () => {
   });
 
   it("keeps compound interest as the only live and featured tool", () => {
-    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization", "loan-payoff"]);
+    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization", "loan-payoff", "sip-calculator"]);
     expect(getFeaturedCalculator().slug).toBe("compound-interest");
-    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(5);
+    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(6);
   });
 
   it("never produces links for unavailable tools", () => {
@@ -77,7 +77,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(noFeatured)).toThrow(/exactly one live featured/);
 
     const plannedFeatured = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedFeatured[5]!.featured = true;
+    plannedFeatured[6]!.featured = true;
     expect(() => assertCalculatorCatalogInvariants(plannedFeatured as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot be featured/);
 
     const missingRelated = mutableCatalog() as unknown as Array<Record<string, unknown>>;
@@ -93,7 +93,7 @@ describe("calculator catalog", () => {
     expect(() => assertCalculatorCatalogInvariants(duplicateRelated as unknown as CalculatorDefinition[])).toThrow(/Duplicate related calculator/);
 
     const plannedRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;
-    plannedRoute[5]!.route = "/calculators/apy-effective-interest-rate";
+    plannedRoute[6]!.route = "/calculators/apy-effective-interest-rate";
     expect(() => assertCalculatorCatalogInvariants(plannedRoute as unknown as CalculatorDefinition[])).toThrow(/Planned calculator cannot have a route/);
 
     const mismatchedLiveRoute = mutableCatalog() as unknown as Array<Record<string, unknown>>;

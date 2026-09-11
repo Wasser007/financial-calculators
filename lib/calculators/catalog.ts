@@ -109,6 +109,21 @@ export const calculatorCatalog = [
     },
   },
   {
+    slug: "sip-calculator",
+    name: "SIP / DCA Calculator",
+    shortDescription: "Explore how regular monthly investments and compound growth build long-term wealth over time.",
+    goal: "Grow your money",
+    availability: "live",
+    featured: false,
+    publicListing: true,
+    route: "/calculators/sip-calculator",
+    relatedCalculators: ["compound-interest", "savings-goal"],
+    metadata: {
+      title: "SIP / DCA Calculator",
+      description: "Forecast investment growth and returns from disciplined periodic monthly contributions.",
+    },
+  },
+  {
     slug: "apy-effective-interest-rate",
     name: "APY / Effective Interest Rate Calculator",
     shortDescription: "Compare a nominal rate with its effective annual yield.",

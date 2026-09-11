@@ -36,12 +36,13 @@ describe("formal site structure", () => {
   it("links the only live calculator and keeps planned tools non-interactive", () => {
     render(<CalculatorsPage />);
     const openButtons = screen.getAllByRole("link", { name: "Open calculator" });
-    expect(openButtons).toHaveLength(5);
+    expect(openButtons).toHaveLength(6);
     expect(openButtons[0]?.getAttribute("href")).toBe("/calculators/compound-interest");
         expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
     expect(openButtons[2]?.getAttribute("href")).toBe("/calculators/how-long-will-my-money-last");
     expect(openButtons[3]?.getAttribute("href")).toBe("/calculators/loan-mortgage-amortization");
     expect(openButtons[4]?.getAttribute("href")).toBe("/calculators/loan-payoff");
+    expect(openButtons[5]?.getAttribute("href")).toBe("/calculators/sip-calculator");
     expect(openButtons[3]?.getAttribute("href")).toBe("/calculators/loan-mortgage-amortization");
     expect(openButtons[4]?.getAttribute("href")).toBe("/calculators/loan-payoff");
     const planned = screen.getByRole("heading", { name: "Planned tools by goal" }).closest("section");
