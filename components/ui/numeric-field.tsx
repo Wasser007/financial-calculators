@@ -1,5 +1,14 @@
 "use client";
 
+const SYMBOL_LOOKUP: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  CAD: "$",
+  AUD: "$",
+  JPY: "¥",
+};
+
 import React, { useMemo } from "react";
 import { StepperButtons } from "../stepper-buttons.js";
 
@@ -43,7 +52,8 @@ export function NumericField({
     onChange(formatted);
   };
 
-  const hasPrefix = Boolean(prefix);
+  const normalizedPrefix = prefix ? (SYMBOL_LOOKUP[prefix] || prefix) : undefined;
+  const hasPrefix = Boolean(normalizedPrefix);
   const hasSuffix = Boolean(suffix);
 
   // 动态内联计算左内边距，根据前缀字符数精确留白，彻底免疫单字符($)与多字符(USD)冲突
@@ -61,7 +71,7 @@ export function NumericField({
       <div className="control-wrap">
         {hasPrefix && (
           <span className="control-adornment control-adornment--prefix" aria-hidden="true">
-            {prefix}
+            {normalizedPrefix}
           </span>
         )}
         <input

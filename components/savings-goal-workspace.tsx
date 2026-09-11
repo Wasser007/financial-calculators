@@ -1,5 +1,6 @@
 "use client";
 
+const CURRENCY_SYMBOLS: Record<string, string> = { USD: "$", EUR: "€", GBP: "£", CAD: "$", AUD: "$", JPY: "¥" };
 import React, { useState, useMemo } from "react";
 import { NumericField } from "./ui/numeric-field.js";
 import {
@@ -101,7 +102,7 @@ export function SavingsGoalWorkspace() {
                   name="targetAmount"
                   label="Savings Target ($)"
                   value={form.targetAmount}
-                  prefix={currency}
+                  prefix={CURRENCY_SYMBOLS[currency] || "$"}
                   step={1000}
                   min={1}
                   helpText="The final accumulated amount you are targeting."
@@ -114,7 +115,7 @@ export function SavingsGoalWorkspace() {
                   name="initialBalance"
                   label="Initial Starting Balance ($)"
                   value={form.initialBalance}
-                  prefix={currency}
+                  prefix={CURRENCY_SYMBOLS[currency] || "$"}
                   step={500}
                   min={0}
                   helpText="Amount already saved before recurring deposits."

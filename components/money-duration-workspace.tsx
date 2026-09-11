@@ -1,5 +1,6 @@
 "use client";
 
+const CURRENCY_SYMBOLS: Record<string, string> = { USD: "$", EUR: "€", GBP: "£", CAD: "$", AUD: "$", JPY: "¥" };
 import React, { useState, useMemo } from "react";
 import {
   MONEY_DURATION_DEFAULTS,
@@ -102,7 +103,7 @@ export function MoneyDurationWorkspace() {
                 name="initialBalance"
                 label="Starting Portfolio Balance"
                 value={form.initialBalance}
-                prefix={currency}
+                prefix={CURRENCY_SYMBOLS[currency] || "$"}
                 step={5000}
                 min={1}
                 decimals={0}
@@ -116,7 +117,7 @@ export function MoneyDurationWorkspace() {
                 name="monthlyWithdrawal"
                 label="Monthly Withdrawal Amount"
                 value={form.monthlyWithdrawal}
-                prefix={currency}
+                prefix={CURRENCY_SYMBOLS[currency] || "$"}
                 step={100}
                 min={1}
                 decimals={0}
