@@ -1,2 +1,0 @@
-# Google AdSense Publisher ID
-google.com, pub-2772154244281806, DIRECT, f08c47fec0942fa0

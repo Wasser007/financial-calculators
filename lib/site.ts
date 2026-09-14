@@ -20,19 +20,20 @@ export const SITE = {
 } as const;
 
 export const primaryNavigation = [
-  { href: "/calculators", label: "Calculators" },
-  { href: "/methodology", label: "Methodology" },
-  { href: "/about", label: "About" },
+  { href: "/calculators/", label: "Calculators" },
+  { href: "/methodology/", label: "Methodology" },
+  { href: "/about/", label: "About" },
 ] as const;
 
 export const trustNavigation = [
-  { href: "/editorial-policy", label: "Editorial policy" },
-  { href: "/disclaimer", label: "Disclaimer" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
-  { href: "/contact", label: "Contact" },
+  { href: "/editorial-policy/", label: "Editorial policy" },
+  { href: "/disclaimer/", label: "Disclaimer" },
+  { href: "/privacy/", label: "Privacy" },
+  { href: "/terms/", label: "Terms" },
+  { href: "/contact/", label: "Contact" },
 ] as const;
 
 export function isCurrentSection(pathname: string, href: string): boolean {
-  return pathname === href || (href === "/calculators" && pathname.startsWith("/calculators/"));
+  const normalizedHref = href === "/" ? "/" : href.replace(/\/$/, "");
+  return pathname === normalizedHref || (normalizedHref === "/calculators" && pathname.startsWith("/calculators/"));
 }

@@ -28,7 +28,7 @@ export function SiteHeader() {
             {/* 1. Calculators 带有 3D 浮雕效果的下拉菜单 */}
             <div className="nav-item-dropdown">
               <Link
-                href="/calculators"
+                href="/calculators/"
                 className={`nav-dropdown-trigger ${isCalculatorsActive ? "nav-dropdown-trigger--active" : ""}`}
                 aria-current={isCalculatorsActive ? "page" : undefined}
                 prefetch={false}
@@ -41,7 +41,7 @@ export function SiteHeader() {
                 {liveCalculators.map((calc) => (
                   <Link
                     key={calc.slug}
-                    href={calc.route ?? "/calculators"}
+                    href={calc.route ? `${calc.route}/` : "/calculators/"}
                     className={`nav-dropdown-item ${pathname === calc.route ? "nav-dropdown-item--active" : ""}`}
                     prefetch={false}
                   >
@@ -50,7 +50,7 @@ export function SiteHeader() {
                   </Link>
                 ))}
                 <div className="nav-dropdown-menu__footer">
-                  <Link href="/calculators" className="all-tools-link" prefetch={false}>
+                  <Link href="/calculators/" className="all-tools-link" prefetch={false}>
                     View all tools & directory →
                   </Link>
                 </div>
@@ -60,7 +60,7 @@ export function SiteHeader() {
             {/* 2. Methodology 下拉菜单 */}
             <div className="nav-item-dropdown">
               <Link
-                href="/methodology"
+                href="/methodology/"
                 className={`nav-dropdown-trigger ${isMethodologyActive ? "nav-dropdown-trigger--active" : ""}`}
                 aria-current={isMethodologyActive ? "page" : undefined}
                 prefetch={false}
@@ -69,11 +69,11 @@ export function SiteHeader() {
                 <span className="dropdown-arrow" aria-hidden="true">▾</span>
               </Link>
               <div className="nav-dropdown-menu">
-                <Link href="/methodology" className="nav-dropdown-item" prefetch={false}>
+                <Link href="/methodology/" className="nav-dropdown-item" prefetch={false}>
                   <span className="item-title">Calculation Methodology</span>
                   <span className="item-desc">Core financial formulas, order of operations, and math standards</span>
                 </Link>
-                <Link href="/editorial-policy" className="nav-dropdown-item" prefetch={false}>
+                <Link href="/editorial-policy/" className="nav-dropdown-item" prefetch={false}>
                   <span className="item-title">Editorial Policy</span>
                   <span className="item-desc">Transparency criteria and independence guidelines</span>
                 </Link>
@@ -82,7 +82,7 @@ export function SiteHeader() {
 
             {/* 3. 普通导航项 */}
             <Link
-              href="/about"
+              href="/about/"
               className="nav-plain-link"
               aria-current={isCurrentSection(pathname, "/about") ? "page" : undefined}
               prefetch={false}
@@ -97,7 +97,7 @@ export function SiteHeader() {
           <summary aria-label="Site navigation"><span>Menu</span><span aria-hidden="true">＋</span></summary>
           <nav aria-label="Mobile navigation" className="mobile-nav__panel">
             <Link
-              href="/calculators"
+              href="/calculators/"
               aria-current={isCalculatorsActive ? "page" : undefined}
               prefetch={false}
               onClick={() => { if (mobileMenu.current) mobileMenu.current.open = false; }}
@@ -105,7 +105,7 @@ export function SiteHeader() {
               Calculators
             </Link>
             <Link
-              href="/methodology"
+              href="/methodology/"
               aria-current={isMethodologyActive ? "page" : undefined}
               prefetch={false}
               onClick={() => { if (mobileMenu.current) mobileMenu.current.open = false; }}
@@ -113,7 +113,7 @@ export function SiteHeader() {
               Methodology
             </Link>
             <Link
-              href="/about"
+              href="/about/"
               aria-current={isCurrentSection(pathname, "/about") ? "page" : undefined}
               prefetch={false}
               onClick={() => { if (mobileMenu.current) mobileMenu.current.open = false; }}

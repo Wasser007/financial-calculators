@@ -72,6 +72,18 @@ describe("App Router foundation contract", () => {
     expect(globalStyles).not.toMatch(/min-width\s*:\s*320px\s*;?/i);
   });
 
+  it("keeps the forced desktop navigation layout out of mobile viewports", () => {
+    expect(globalStyles).toContain("@media (min-width: 701px) {\n  .site-nav--desktop {");
+    expect(globalStyles).toContain("@media (max-width: 700px) {");
+    expect(globalStyles).toContain(".site-nav--desktop { display: none; }");
+  });
+
+  it("keeps the repeated two-column calculator layout out of narrow viewports", () => {
+    expect(globalStyles).toContain("@media (min-width: 961px) {\n  .calculator-layout {");
+    expect(globalStyles).toContain("@media (max-width: 960px) {");
+    expect(globalStyles).toContain(".calculator-layout { grid-template-columns: 1fr; }");
+  });
+
   it("keeps default and supporting copy black at a readable size", () => {
     expect(globalStyles).toContain("--ink: #000000");
     expect(globalStyles).toContain("--ink-soft: #000000");

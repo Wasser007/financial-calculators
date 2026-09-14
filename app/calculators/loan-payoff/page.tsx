@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
 import { CalculatorPageTemplate } from "../../../components/templates/CalculatorPageTemplate.js";
 import { LoanPayoffWorkspace } from "../../../components/loan-payoff-workspace.js";
+import { createPageMetadata } from "../../../lib/seo/publication.js";
 
-export const metadata: Metadata = {
-  title: "Loan Payoff Calculator - Early Debt Payoff & Interest Savings",
-  description:
-    "Calculate how extra monthly payments accelerate your loan payoff date and reduce total interest paid. Free, private, and instant debt payoff estimator.",
-};
+export const metadata = createPageMetadata("/calculators/loan-payoff");
 
 const FAQS: [string, string][] = [
   [

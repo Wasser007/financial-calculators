@@ -751,11 +751,13 @@ input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity:
   margin-bottom: 1.5rem;
 }
 
-.calculator-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
-  align-items: start !important;
-  gap: 1.5rem;
+@media (min-width: 961px) {
+  .calculator-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr);
+    align-items: start !important;
+    gap: 1.5rem;
+  }
 }
 
 /* 保证左右卡片顶部绝对平齐，消除任何由 sticky 或 margin 引入的纵向偏差 */
@@ -1148,10 +1150,12 @@ a.button--secondary:active {
   gap: 2.25rem !important;
 }
 
-.site-nav--desktop {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.75rem !important;
+@media (min-width: 701px) {
+  .site-nav--desktop {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+  }
 }
 
 /* 2. 导航项胶囊微按钮风格 */

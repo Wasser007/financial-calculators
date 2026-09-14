@@ -26,7 +26,7 @@ describe("publication and SEO safety", () => {
   });
 
   it("builds canonicals only from an approved HTTPS origin and normalized path", () => {
-    expect(buildCanonical("/calculators/compound-interest?amount=1000#result", ready)).toBe("https://example.com/calculators/compound-interest");
+    expect(buildCanonical("/calculators/compound-interest?amount=1000#result", ready)).toBe("https://example.com/calculators/compound-interest/");
     expect(buildCanonical("https://attacker.example/path", ready)).toBeNull();
     expect(buildCanonical("/path", { ...ready, canonicalOrigin: "http://example.com" })).toBeNull();
     expect(buildCanonical("/path", { ...ready, canonicalOrigin: "https://example.com/base" })).toBeNull();
@@ -45,7 +45,7 @@ describe("publication and SEO safety", () => {
     expect(paths).toContain("/calculators/compound-interest");
     expect(paths).toContain("/calculators/savings-goal");
     expect(paths.every((path) => !path.includes("?") && !/^\/(de|fr|es)(\/|$)/.test(path))).toBe(true);
-    expect(buildSitemapEntries(ready).map(({ url }) => url)).toEqual(paths.map((path) => new URL(path, "https://example.com").toString()));
+    expect(buildSitemapEntries(ready).map(({ url }) => url)).toEqual(paths.map((path) => new URL(path === "/" ? "/" : `${path}/`, "https://example.com").toString()));
   });
 
   it("suppresses unsupported schema until facts are approved and serializes script-safe JSON", () => {

@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { assertCalculatorCatalogInvariants, calculatorCatalog, calculatorGoals, calculatorHref, getFeaturedCalculator, getListedCalculators, getLiveCalculators, getRelatedCalculators, type CalculatorDefinition } from "../../lib/calculators/catalog.js";
+import { assertCalculatorCatalogInvariants, calculatorCatalog, calculatorGoals, calculatorHref, getFeaturedCalculator, getListedCalculators, getLiveCalculators, getRelatedCalculators, getRequiredCalculator, type CalculatorDefinition } from "../../lib/calculators/catalog.js";
 
 function mutableCatalog(): CalculatorDefinition[] {
   return structuredClone(calculatorCatalog) as unknown as CalculatorDefinition[];
@@ -25,23 +25,24 @@ describe("calculator catalog", () => {
     }
   });
 
-  it("keeps compound interest as the only live and featured tool", () => {
-    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization", "loan-payoff", "sip-calculator"]);
+  it("keeps five release-qualified calculators live and compound interest featured", () => {
+    expect(getLiveCalculators().map((calculator) => calculator.slug)).toEqual(["compound-interest", "savings-goal", "how-long-will-my-money-last", "loan-mortgage-amortization", "loan-payoff"]);
     expect(getFeaturedCalculator().slug).toBe("compound-interest");
-    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(6);
+    expect(getListedCalculators().filter((calculator) => calculator.availability === "live")).toHaveLength(5);
+    expect(getRequiredCalculator("sip-calculator")).toMatchObject({ availability: "planned", publicListing: true, route: null });
   });
 
   it("never produces links for unavailable tools", () => {
     for (const calculator of calculatorCatalog) {
-      expect(calculatorHref(calculator)).toBe(calculator.availability === "live" ? calculator.route : undefined);
+      expect(calculatorHref(calculator)).toBe(calculator.availability === "live" ? `${calculator.route}/` : undefined);
     }
   });
 
   it("derives each public live route from the catalog and proves its App Router page exists", () => {
     for (const calculator of calculatorCatalog.filter((item) => item.availability === "live" && item.publicListing)) {
       const route = calculatorHref(calculator);
-      expect(route).toBe(`/calculators/${calculator.slug}`);
-      expect(existsSync(fileURLToPath(new URL(`../../app${route}/page.tsx`, import.meta.url)))).toBe(true);
+      expect(route).toBe(`/calculators/${calculator.slug}/`);
+      expect(existsSync(fileURLToPath(new URL(`../../app${route}page.tsx`, import.meta.url)))).toBe(true);
     }
   });
 
@@ -50,10 +51,10 @@ describe("calculator catalog", () => {
     expect(related.map((calculator) => calculator.slug)).toEqual(["savings-goal", "how-long-will-my-money-last"]);
     const savingsGoal = related.find((c) => c.slug === "savings-goal");
     expect(savingsGoal?.availability).toBe("live");
-    expect(calculatorHref(savingsGoal!)).toBe("/calculators/savings-goal");
+    expect(calculatorHref(savingsGoal!)).toBe("/calculators/savings-goal/");
     const moneyDuration = related.find((c) => c.slug === "how-long-will-my-money-last");
     expect(moneyDuration?.availability).toBe("live");
-    expect(calculatorHref(moneyDuration!)).toBe("/calculators/how-long-will-my-money-last");
+    expect(calculatorHref(moneyDuration!)).toBe("/calculators/how-long-will-my-money-last/");
     const plannedTool = getListedCalculators().find((c) => c.availability === "planned");
     expect(plannedTool?.availability).toBe("planned");
     expect(calculatorHref(plannedTool!)).toBeUndefined();

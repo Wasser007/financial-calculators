@@ -7,6 +7,6 @@ export function FeedbackOptions({ pathname }: { pathname: string }) {
   return <section className="feedback-panel" aria-labelledby="feedback-heading">
     <p className="eyebrow">Help improve this page</p>
     <h2 id="feedback-heading">Report a problem or share feedback</h2>
-    {available ? <><ul>{options.map(({ id, label, href }) => <li key={id}><a href={href!}>{label}</a></li>)}</ul><p>Do not include passwords, account numbers, government identifiers, or other sensitive financial information.</p></> : <><p>The public feedback channel is not available yet. These report types are prepared for a verified contact channel:</p><ul>{options.map(({ id, label }) => <li key={id}>{label}</li>)}</ul><p>See <Link href="/contact" prefetch={false}>contact and feedback status</Link>. Do not send sensitive financial information.</p></>}
+    {available ? <><ul>{options.map(({ id, label, href }) => <li key={id}><a href={href!}>{label}</a></li>)}</ul><p>Do not include passwords, account numbers, government identifiers, or other sensitive financial information.</p></> : <><p>The public feedback channel is not available yet. These report types are prepared for a verified contact channel:</p><ul>{options.map(({ id, label }) => <li key={id}>{label}</li>)}</ul><p>See <Link href="/contact/" prefetch={false}>contact and feedback status</Link>. Do not send sensitive financial information.</p></>}
   </section>;
 }

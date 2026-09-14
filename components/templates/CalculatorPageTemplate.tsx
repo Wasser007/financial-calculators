@@ -48,7 +48,7 @@ export function CalculatorPageTemplate({
     <main id="main-content" className={`page-container calculator-page page-${slug}`}>
       {/* 1. 统一面包屑 */}
       <nav aria-label="Breadcrumb" className="breadcrumbs">
-        <Link href="/calculators" prefetch={false}>
+        <Link href="/calculators/" prefetch={false}>
           {categoryName}
         </Link>
         <span aria-hidden="true">/</span>
@@ -123,10 +123,10 @@ export function CalculatorPageTemplate({
       <section className="related-section" aria-labelledby="related-heading">
         <h2 id="related-heading">Understand the boundaries</h2>
         <div className="related-links">
-          <Link href="/methodology" prefetch={false}>
+          <Link href="/methodology/" prefetch={false}>
             Calculation methodology <span aria-hidden="true">→</span>
           </Link>
-          <Link href="/disclaimer" prefetch={false}>
+          <Link href="/disclaimer/" prefetch={false}>
             Financial disclaimer <span aria-hidden="true">→</span>
           </Link>
         </div>

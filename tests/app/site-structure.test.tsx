@@ -7,6 +7,7 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/calculators/compound-in
 
 import CalculatorsPage from "../../app/calculators/page";
 import ContactPage from "../../app/contact/page";
+import HomePage from "../../app/page";
 import PrivacyPage from "../../app/privacy/page";
 import { SiteFooter } from "../../components/site-footer";
 import { SiteHeader } from "../../components/site-header";
@@ -36,19 +37,23 @@ describe("formal site structure", () => {
   it("links the only live calculator and keeps planned tools non-interactive", () => {
     render(<CalculatorsPage />);
     const openButtons = screen.getAllByRole("link", { name: "Open calculator" });
-    expect(openButtons).toHaveLength(6);
+    expect(openButtons).toHaveLength(5);
     expect(openButtons[0]?.getAttribute("href")).toBe("/calculators/compound-interest");
-        expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
+    expect(openButtons[1]?.getAttribute("href")).toBe("/calculators/savings-goal");
     expect(openButtons[2]?.getAttribute("href")).toBe("/calculators/how-long-will-my-money-last");
-    expect(openButtons[3]?.getAttribute("href")).toBe("/calculators/loan-mortgage-amortization");
-    expect(openButtons[4]?.getAttribute("href")).toBe("/calculators/loan-payoff");
-    expect(openButtons[5]?.getAttribute("href")).toBe("/calculators/sip-calculator");
     expect(openButtons[3]?.getAttribute("href")).toBe("/calculators/loan-mortgage-amortization");
     expect(openButtons[4]?.getAttribute("href")).toBe("/calculators/loan-payoff");
     const planned = screen.getByRole("heading", { name: "Planned tools by goal" }).closest("section");
     expect(planned).not.toBeNull();
     expect(within(planned!).queryAllByRole("link")).toHaveLength(0);
-    expect(within(planned!).getAllByText("Planned")).toHaveLength(1);
+    expect(within(planned!).getAllByText("Planned")).toHaveLength(2);
+    expect(within(planned!).getByText("SIP / DCA Calculator")).toBeTruthy();
+  });
+
+  it("presents compound interest as featured without implying it is the only available calculator", () => {
+    render(<HomePage />);
+    expect(screen.getByText("Featured calculator")).toBeTruthy();
+    expect(screen.queryByText("Available now")).toBeNull();
   });
 
   it("publishes truthful privacy and contact boundaries without a fabricated contact link", () => {

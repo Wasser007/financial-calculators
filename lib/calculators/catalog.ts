@@ -113,10 +113,10 @@ export const calculatorCatalog = [
     name: "SIP / DCA Calculator",
     shortDescription: "Explore how regular monthly investments and compound growth build long-term wealth over time.",
     goal: "Grow your money",
-    availability: "live",
+    availability: "planned",
     featured: false,
     publicListing: true,
-    route: "/calculators/sip-calculator",
+    route: null,
     relatedCalculators: ["compound-interest", "savings-goal"],
     metadata: {
       title: "SIP / DCA Calculator",
@@ -230,4 +230,4 @@ export function getListedCalculators(): readonly CalculatorDefinition[] { return
 export function getLiveCalculators(): readonly CalculatorDefinition[] { return calculatorCatalog.filter((calculator) => calculator.availability === "live"); }
 export function getFeaturedCalculator(): CalculatorDefinition { const featured = calculatorCatalog.find((calculator) => calculator.featured && calculator.availability === "live"); if (!featured) throw new Error("The calculator catalog requires one live featured calculator."); return featured; }
 export function getRelatedCalculators(slug: string): readonly CalculatorDefinition[] { const calculator = getCalculator(slug); if (!calculator) return []; return calculator.relatedCalculators.map(getCalculator).filter((item): item is CalculatorDefinition => item !== undefined && item.publicListing); }
-export function calculatorHref(calculator: CalculatorDefinition): string | undefined { return calculator.availability === "live" && calculator.publicListing ? calculator.route : undefined; }
+export function calculatorHref(calculator: CalculatorDefinition): string | undefined { return calculator.availability === "live" && calculator.publicListing ? `${calculator.route}/` : undefined; }

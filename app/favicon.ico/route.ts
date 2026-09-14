@@ -11,6 +11,7 @@ export function GET() {
     headers: {
       "Cache-Control": "public, max-age=86400",
       "Content-Type": "image/svg+xml; charset=utf-8",
+      "X-Robots-Tag": "noindex, nofollow",
     },
   });
 }

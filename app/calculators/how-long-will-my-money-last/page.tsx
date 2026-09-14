@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
 import { CalculatorPageTemplate } from "../../../components/templates/CalculatorPageTemplate.js";
 import { MoneyDurationWorkspace } from "../../../components/money-duration-workspace.js";
+import { createPageMetadata } from "../../../lib/seo/publication.js";
 
-export const metadata: Metadata = {
-  title: "How Long Will My Money Last? - Longevity Calculator",
-  description:
-    "Free retirement and savings longevity calculator. Calculate how many years your savings portfolio will sustain recurring withdrawals under return and inflation assumptions.",
-};
+export const metadata = createPageMetadata("/calculators/how-long-will-my-money-last");
 
 const FAQS: [string, string][] = [
   [

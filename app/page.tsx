@@ -23,7 +23,7 @@ export default function HomePage() {
           <p className="home-hero__lede">ClearCash Calc provides focused calculators for exploring financial scenarios, with transparent assumptions and plain-language limitations.</p>
           <div className="hero-actions">
             <Link className="button button--primary" href={featuredHref} prefetch={false}>Use the {featured.name.toLowerCase()}</Link>
-            <Link className="button button--secondary" href="/calculators" prefetch={false}>Browse calculators</Link>
+            <Link className="button button--secondary" href="/calculators/" prefetch={false}>Browse calculators</Link>
           </div>
           <ul className="trust-list" aria-label="Site trust information"><li>No sign-up</li><li>Inputs stay in your browser</li><li>Transparent methodology</li></ul>
         </div>
@@ -31,12 +31,12 @@ export default function HomePage() {
           <p className="eyebrow">A useful boundary</p>
           <h2 id="illustration-boundary">Explore a scenario—not a forecast.</h2>
           <p>Results depend entirely on your inputs and the model’s assumptions. Actual returns, costs, taxes, inflation, and personal circumstances can differ.</p>
-          <Link href="/disclaimer" prefetch={false}>Read the full disclaimer</Link>
+          <Link href="/disclaimer/" prefetch={false}>Read the full disclaimer</Link>
         </aside>
       </section>
 
       <section aria-labelledby="available-tool" className="home-section flagship-section">
-        <div className="section-heading"><p className="eyebrow">Available now</p><h2 id="available-tool">{featured.name}</h2><p>{featured.shortDescription}</p></div>
+        <div className="section-heading"><p className="eyebrow">Featured calculator</p><h2 id="available-tool">{featured.name}</h2><p>{featured.shortDescription}</p></div>
         <div className="flagship-card">
           <div><span className="availability-badge">Live tool</span><h3>See how contributions and assumptions shape a balance over time.</h3><p>Review a result summary, interactive charts, and a complete annual table. Change currency and number format independently without changing the calculation.</p></div>
           <Link className="text-link text-link--prominent" href={featuredHref} prefetch={false}>Open the calculator <span aria-hidden="true">→</span></Link>
@@ -51,9 +51,9 @@ export default function HomePage() {
       <section aria-labelledby="trust-links-heading" className="home-section trust-paths">
         <div><p className="eyebrow">Before you rely on a result</p><h2 id="trust-links-heading">Check the method and the boundaries.</h2></div>
         <div className="trust-paths__links">
-          <Link href="/methodology" prefetch={false}><strong>Methodology</strong><span>Calculation order, fees, inflation, rounding, and limitations.</span></Link>
-          <Link href="/privacy" prefetch={false}><strong>Privacy</strong><span>What the current site does—and does not—collect or retain.</span></Link>
-          <Link href="/about" prefetch={false}><strong>About</strong><span>Who these tools are for and the standards guiding them.</span></Link>
+          <Link href="/methodology/" prefetch={false}><strong>Methodology</strong><span>Calculation order, fees, inflation, rounding, and limitations.</span></Link>
+          <Link href="/privacy/" prefetch={false}><strong>Privacy</strong><span>What the current site does—and does not—collect or retain.</span></Link>
+          <Link href="/about/" prefetch={false}><strong>About</strong><span>Who these tools are for and the standards guiding them.</span></Link>
         </div>
       </section>
     </main>

@@ -24,7 +24,7 @@ const REFERENCES = [
     external: true,
   },
   {
-    href: "/methodology",
+    href: "/methodology/",
     label: "Our calculation methodology and limitations",
     external: false,
   },
