@@ -1,3 +1,4 @@
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { CompoundInterestPage } from "../../compound-interest-page";
 import { createPageMetadata } from "../../../lib/seo/publication";
 
